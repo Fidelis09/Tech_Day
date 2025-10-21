@@ -1,4 +1,4 @@
-# gui_admin.py (versão atualizada)
+# gui_admin.py (versão corrigida)
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 import os
@@ -18,11 +18,12 @@ class AdminTab:
         self.atualizar_lista_brinquedos = atualizar_lista
         
         self.caminho_imagem = None
-        self.brinquedo_selecionado_id = None # Para saber qual brinquedo estamos editando
+        self.brinquedo_selecionado_id = None
         
         self._montar_interface()
         self.atualizar_treeview_brinquedos()
 
+    # ... (_montar_interface, selecionar_imagem, _copiar_imagem, cadastrar_brinquedo, salvar_atualizacao são iguais) ...
     def _montar_interface(self):
         # Dividir a interface
         self.form_frame = ttk.Frame(self.frame)
@@ -125,11 +126,9 @@ class AdminTab:
             imagem=destino_imagem
         )
 
-        # Salva no DB e obtém o ID
         novo_id = salvar_brinquedo(brinquedo)
         brinquedo.id = novo_id
 
-        # Adiciona na lista local
         self.brinquedos.append(brinquedo)
         
         messagebox.showinfo("Sucesso", "Brinquedo cadastrado com sucesso!")
@@ -141,23 +140,19 @@ class AdminTab:
         if self.brinquedo_selecionado_id is None:
             return
 
-        # Encontra o brinquedo na lista local
         brinquedo = next((b for b in self.brinquedos if b.id == self.brinquedo_selecionado_id), None)
         if not brinquedo:
             messagebox.showerror("Erro", "Brinquedo não encontrado.")
             return
 
-        # Pega novos dados do formulário
         brinquedo.nome = self.nome_entry.get()
         brinquedo.tamanho = self.tamanho_entry.get()
         brinquedo.preco = float(self.preco_entry.get())
         brinquedo.faixa_etaria = self.faixa_entry.get()
         
-        # Se uma nova imagem foi selecionada, copia e atualiza o caminho
         if self.caminho_imagem:
              brinquedo.imagem = self._copiar_imagem()
 
-        # Salva a atualização no banco de dados
         atualizar_brinquedo(brinquedo)
 
         messagebox.showinfo("Sucesso", "Brinquedo atualizado com sucesso!")
@@ -170,47 +165,45 @@ class AdminTab:
             messagebox.showwarning("Aviso", "Selecione um brinquedo para deletar.")
             return
 
-        item = self.tree.item(selecionado)
-        brinquedo_id = item['values'][0] # Pega o ID da coluna 0
+        # CORREÇÃO: Usar selecionado[0] pois a seleção é uma tupla
+        item = self.tree.item(selecionado[0]) 
+        brinquedo_id = item['values'][0]
 
         if messagebox.askyesno("Confirmar", f"Tem certeza que deseja excluir o brinquedo ID {brinquedo_id}?"):
-            # Deleta do banco
             deletar_brinquedo(brinquedo_id)
-
-            # Remove da lista local
             self.brinquedos = [b for b in self.brinquedos if b.id != brinquedo_id]
-
             messagebox.showinfo("Sucesso", "Brinquedo removido.")
             self.atualizar_tudo()
             self.limpar_campos()
 
     def carregar_brinquedo_para_edicao(self, event=None):
-        selecionado = self.tree.selection()
+        selecionado = self.tree.selection() # 1. PEGAR A SELEÇÃO PRIMEIRO
         if not selecionado:
             return
 
-        item = self.tree.item(selecionado)
+        # 2. LIMPAR O FORMULÁRIO SEM DESELECIONAR O ITEM
+        self.limpar_campos(deselect=False) 
+
+        # CORREÇÃO: Usar selecionado[0]
+        item = self.tree.item(selecionado[0]) 
         brinquedo_id = item['values'][0]
 
-        # Encontra o brinquedo na lista local pelo ID
         brinquedo = next((b for b in self.brinquedos if b.id == brinquedo_id), None)
 
         if brinquedo:
-            self.limpar_campos()
             self.nome_entry.insert(0, brinquedo.nome)
             self.tamanho_entry.insert(0, brinquedo.tamanho)
             self.preco_entry.insert(0, str(brinquedo.preco))
             self.faixa_entry.insert(0, brinquedo.faixa_etaria)
             self.img_label.config(text=os.path.basename(brinquedo.imagem))
             
-            # Guarda o ID do brinquedo que está sendo editado
             self.brinquedo_selecionado_id = brinquedo.id
             
-            # Habilita/Desabilita botões
             self.btn_salvar.config(state='normal')
             self.btn_cadastrar.config(state='disabled')
 
-    def limpar_campos(self):
+    # 3. ADICIONAR PARÂMETRO 'deselect'
+    def limpar_campos(self, deselect=True): 
         self.nome_entry.delete(0, tk.END)
         self.tamanho_entry.delete(0, tk.END)
         self.preco_entry.delete(0, tk.END)
@@ -220,26 +213,22 @@ class AdminTab:
         self.caminho_imagem = None
         self.brinquedo_selecionado_id = None
         
-        # Reseta botões
         self.btn_salvar.config(state='disabled')
         self.btn_cadastrar.config(state='normal')
         
-        # Desseleciona item na treeview
-        if self.tree.selection():
-            self.tree.selection_remove(self.tree.selection())
+        # 4. SÓ DESELECIONAR SE 'deselect' FOR TRUE
+        if deselect:
+            if self.tree.selection():
+                self.tree.selection_remove(self.tree.selection())
 
     def atualizar_treeview_brinquedos(self):
-        # Limpa a treeview
         for item in self.tree.get_children():
             self.tree.delete(item)
         
-        # Preenche com os dados da lista local
         for b in self.brinquedos:
             self.tree.insert('', tk.END, values=(b.id, b.nome, f"R$ {b.preco:.2f}", b.tamanho))
 
     def atualizar_tudo(self):
-        # Atualiza esta aba
         self.atualizar_treeview_brinquedos()
-        # Atualiza as outras abas (Catálogo do Usuário, Lista de Agendamento)
         self.atualizar_catalogo()
-        self.atualizar_lista_brinquedos()
+        self.atualizar_lista_brinquedos()   

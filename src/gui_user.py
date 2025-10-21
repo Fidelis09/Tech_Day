@@ -14,6 +14,7 @@ class UserTab:
         self.valor_total = 0
         self._montar_interface()
 
+    # ... (funções _montar_interface, atualizar_catalogo, atualizar_lista_brinquedos, calcular_valor são iguais) ...
     def _montar_interface(self):
         # Layout dividido: catálogo e formulário
         self.catalogo_frame = ttk.Frame(self.frame)
@@ -151,6 +152,7 @@ class UserTab:
         brinquedos_selecionados = [self.brinquedos[i].nome for i in selecionados]
 
         agendamento = Agendamento(
+            id=None, # <-- 1. PASSAR ID COMO NONE
             nome=nome,
             telefone=telefone,
             dia=dia,
@@ -162,8 +164,11 @@ class UserTab:
             valor_total=self.valor_total
         )
 
+        novo_id = salvar_agendamento(agendamento) # <-- 2. RECEBER O NOVO ID
+        agendamento.id = novo_id # <-- 3. ATRIBUIR O ID AO OBJETO
+        
         self.agendamentos.append(agendamento)
-        salvar_agendamento(agendamento) # 
+        
         messagebox.showinfo("Agendamento Confirmado",
                             f"{nome} agendado em {dia}/{mes}/{ano} das {inicio}h às {fim}h.\nTotal: R$ {self.valor_total:.2f}")
 

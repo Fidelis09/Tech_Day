@@ -47,7 +47,6 @@ def inicializar_banco():
 def carregar_brinquedos():
     conn = conectar()
     cursor = conn.cursor()
-    # 1. Carregar o ID
     cursor.execute("SELECT id, nome, tamanho, preco, faixa_etaria, imagem FROM brinquedos")
     linhas = cursor.fetchall()
     conn.close()
@@ -61,15 +60,13 @@ def salvar_brinquedo(brinquedo: Brinquedo):
         VALUES (?, ?, ?, ?, ?)
     """, (brinquedo.nome, brinquedo.tamanho, brinquedo.preco, brinquedo.faixa_etaria, brinquedo.imagem))
     
-    # 2. Obter e retornar o ID do item recém-criado
     novo_id = cursor.lastrowid
     
     conn.commit()
     conn.close()
-    return novo_id # Retorna o ID
+    return novo_id
 
 def atualizar_brinquedo(brinquedo: Brinquedo):
-    # 3. Nova função de UPDATE
     conn = conectar()
     cursor = conn.cursor()
     cursor.execute("""
@@ -88,31 +85,30 @@ def atualizar_brinquedo(brinquedo: Brinquedo):
     conn.close()
 
 def deletar_brinquedo(brinquedo_id: int):
-    # 4. Modificada para usar ID
     conn = conectar()
     cursor = conn.cursor()
     cursor.execute("DELETE FROM brinquedos WHERE id = ?", (brinquedo_id,))
     conn.commit()
     conn.close()
 
-# ... (Agendamentos permanecem iguais) ...
-
 # -------------------- AGENDAMENTOS --------------------
 def carregar_agendamentos():
     conn = conectar()
     cursor = conn.cursor()
     cursor.execute("""
-        SELECT nome, telefone, dia, mes, ano, inicio, fim, brinquedos, valor_total
+        SELECT id, nome, telefone, dia, mes, ano, inicio, fim, brinquedos, valor_total
         FROM agendamentos
-    """)
+    """) # <-- 1. SELECIONAR O ID
     linhas = cursor.fetchall()
     conn.close()
 
     agendamentos = []
     for linha in linhas:
-        nome, telefone, dia, mes, ano, inicio, fim, brinquedos, valor_total = linha
+        # 2. DESEMPACOTAR O ID
+        id, nome, telefone, dia, mes, ano, inicio, fim, brinquedos, valor_total = linha
         brinquedos_lista = brinquedos.split(",") if brinquedos else []
         agendamentos.append(Agendamento(
+            id=id, # <-- 3. PASSAR O ID PARA O MODELO
             nome=nome, telefone=telefone,
             dia=dia, mes=mes, ano=ano,
             inicio=inicio, fim=fim,
@@ -138,5 +134,17 @@ def salvar_agendamento(agendamento: Agendamento):
         ",".join(agendamento.brinquedos),
         agendamento.valor_total
     ))
+    
+    novo_id = cursor.lastrowid # <-- 4. OBTER O ID DO NOVO AGENDAMENTO
+    
+    conn.commit()
+    conn.close()
+    return novo_id # <-- 5. RETORNAR O ID
+
+# 6. NOVA FUNÇÃO PARA DELETAR AGENDAMENTO
+def deletar_agendamento(agendamento_id: int):
+    conn = conectar()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM agendamentos WHERE id = ?", (agendamento_id,))
     conn.commit()
     conn.close()

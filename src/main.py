@@ -3,7 +3,6 @@ import tkinter as tk
 from tkinter import ttk
 from storage import carregar_brinquedos, carregar_agendamentos, inicializar_banco
 from gui_admin import AdminTab
-import ttkbootstrap as ttk
 from gui_user import UserTab
 from gui_agendamento import AgendamentoTab
 
@@ -37,5 +36,5 @@ class App:
 
 if __name__ == "__main__":
     root = tk.Tk()
-    root = ttk.Window(themename="cosmo")
+    app = App(root)
     root.mainloop()

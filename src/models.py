@@ -17,6 +17,7 @@ class Brinquedo:
 
 @dataclass
 class Agendamento:
+    id: int  # <-- ADICIONADO
     nome: str
     telefone: str
     dia: int
