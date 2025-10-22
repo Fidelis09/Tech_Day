@@ -1,0 +1,9 @@
+
+<h2>Catálogo de Brinquedos</h2>
+<ul>
+    {% for b in brinquedos %}
+    <li>
+        <img src="{{ url_for('static',filename='imagens/'+b.imagem) }}" width="80">
+        {{ b.nome }} - R$ {{ "%.2f"|format(b.preco) }} - {{ b.faixa_etaria }}
+    </li>
+</ul>

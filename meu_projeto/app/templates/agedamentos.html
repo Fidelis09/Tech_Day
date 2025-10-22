@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h2>Agendamentos</h2>
+<table border="1" cellpadding="5">
+    <tr><th>Nome</th><th>Telefone</th><th>Data</th><th>Horário</th><th>Brinquedos</th><th>Total</th><th>Ações</th></tr>
+    {% for ag in agendamentos %}
+    <tr>
+      <td>{{ ag.nome }}</td>
+      <td>{{ ag.telefone }}</td>
+      <td>{{ formata_data(ag.dia,ag.mes,ag.ano) }}</td>
+      <td>{{ ag.inicio }}h-{{ ag.fim }}h</td>
+      <td>{{ ag.brinquedos }}</td>
+      <td>R$ {{"%.2f"|format(ag.valor_total)}}</td>
+      <td><a href="{{ url_for('agendamentos_delete',id=ag.id) }}">Excluir</a></td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

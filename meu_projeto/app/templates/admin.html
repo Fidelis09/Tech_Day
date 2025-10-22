@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h2>Administração de Brinquedos</h2>
+<form method="post" enctype="multipart/form-data">
+    <input type="hidden" name="id">
+    Nome: <input name="nome"><br>
+    Tamanho: <input name="tamanho"><br>
+    Preço: <input name="preco"><br>
+    Faixa Etária: <input name="faixa"><br>
+    Imagem: <input type="file" name="imagem"><br>
+    <button type="submit">Salvar</button>
+</form>
+<h3>Brinquedos Cadastrados</h3>
+<ul>
+    {% for b in brinquedos %}
+    <li>
+        <img src="{{ url_for('static',filename='imagens/'+b.imagem) }}" width="50">
+        {{ b.nome }} -
+        <a href="{{ url_for('admin_delete',id=b.id) }}">Excluir</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
