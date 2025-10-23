@@ -24,10 +24,36 @@ body {
 
 .sidebar .logo {
     text-align: center;
+    padding-bottom: 1rem; /* espaço abaixo da logo */
 }
 
-.sidebar .emoji {
-    font-size: 2.5rem;
+.sidebar .logo img {
+    max-width: 150px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    transition: transform 0.3s ease; /* Transição suave */
+    cursor: pointer;
+}
+
+.sidebar .logo img:hover {
+  transform: scale(1.1) rotate(5deg); /* Aumenta 10% e rotaciona 5 graus */
+}
+
+.sidebar .logo h1 {
+    margin-top: 0.5rem;
+    color: white;
+    font-weight: 600;
+    font-size: 1.25rem;
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* logo e nav em cima */
+    padding: 2rem 1rem;
+    height: 100vh;
+    box-sizing: border-box;
 }
 
 .sidebar nav {
@@ -106,7 +132,7 @@ body {
 }
 
 .btn {
-    background: linear-gradient(90deg, #ffb300, #1976d2);
+    background-color: #1976d2;
     color: white;
     border: none;
     padding: 0.8rem 1.5rem;
@@ -114,10 +140,11 @@ body {
     cursor: pointer;
     margin-top: 1rem;
     font-weight: 600;
+    transition: background-color 0.3s ease;
 }
 
 .btn:hover {
-    opacity: 0.9;
+    background-color: #145a9c;
 }
 
 .agendamento {
@@ -129,7 +156,7 @@ body {
 }
 
 .tag {
-    background: #ffcc80;
+    background: #1edb5d;
     padding: 0.2rem 0.5rem;
     border-radius: 4px;
     margin-right: 0.3rem;
@@ -172,8 +199,9 @@ body {
     font-weight: 600;
 }
 .tab-button.active {
-    background: #1976d2;
-    color: white;
+    color: #333;
+    border-bottom: none;
+    font-weight: 600;
 }
 .tab-content {
     display: none;
@@ -307,3 +335,5 @@ html, body {
     background-color: rgba(0, 0, 0, 0.2);
     border-radius: 4px;
 }
+
+

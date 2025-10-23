@@ -10,14 +10,14 @@
     <div class="container">
         <aside class="sidebar">
             <div class="logo">
-                <span class="emoji">🎪</span>
+                <img src="{{ url_for('static', filename='imagens/logo.png') }}" alt="Logo Brinquedos Infláveis">
                 <h1>Brinquedos Infláveis</h1>
             </div>
             <nav>
-                <a href="/usuario" class="{{ 'active' if active_page == 'usuario' else '' }}">🏰 Catálogo</a>
-                <a href="/admin" class="{{ 'active' if active_page == 'admin' else '' }}">🛠 Administrador</a>
-                <a href="/agendamentos" class="{{ 'active' if active_page == 'agendamentos' else '' }}">📅 Agendamentos</a>
-                <a href="/orcamentos" class="{{ 'active' if active_page == 'orcamentos' else '' }}">💌 Orçar Festa</a>
+                <a href="/admin" class="{{ 'active' if active_page == 'admin' else '' }}"> Cadastrar Brinquedos</a>
+                <a href="/usuario" class="{{ 'active' if active_page == 'usuario' else '' }}"> Catálogo</a>
+                <a href="/agendamentos" class="{{ 'active' if active_page == 'agendamentos' else '' }}"> Agendamentos</a>
+                <a href="/orcamentos" class="{{ 'active' if active_page == 'orcamentos' else '' }}"> Orçar Festa</a>
             </nav>
         </aside>
 

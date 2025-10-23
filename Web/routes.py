@@ -40,7 +40,7 @@ def pagina_admin():
         flash("Cadastro realizado com sucesso!", "success")
         return redirect('/admin')
 
-    page_content = render_template('novo_brinquedo.html')
+    page_content = render_template('admin.html')
     return render_template(
         'home.html',
         active_page='admin',
