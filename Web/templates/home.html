@@ -23,6 +23,14 @@
 
         <main class="content">
             <header class="page-header">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
                 <h2>{{ page_title }}</h2>
             </header>
             <section class="page-content">

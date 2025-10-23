@@ -11,6 +11,12 @@ class Brinquedo(db.Model):
     faixa_etaria = db.Column(db.String(50))
     caminho_imagem = db.Column(db.String(200))
 
+class Monitor(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.String(100), nullable=False)
+    telefone = db.Column(db.String(20))
+    disponibilidade = db.Column(db.Boolean, default=True)  # True = disponível
+
 class Orcamento(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nome_cliente = db.Column(db.String(100), nullable=False)
@@ -21,6 +27,8 @@ class Orcamento(db.Model):
     agendado = db.Column(db.Boolean, default=False)
     data_festa = db.Column(db.Date, nullable=True)
     hora_festa = db.Column(db.Time, nullable=True)
+    monitor_id = db.Column(db.Integer, db.ForeignKey('monitor.id'), nullable=True)
+    monitor = db.relationship('Monitor', backref='orcamentos')
 
 orcamento_brinquedo = db.Table('orcamento_brinquedo',
     db.Column('orcamento_id', db.Integer, db.ForeignKey('orcamento.id')),

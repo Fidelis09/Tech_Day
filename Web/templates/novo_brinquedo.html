@@ -1,21 +1,60 @@
 <div class="card">
-    <h3>Cadastrar Brinquedo</h3>
-    <form method="post" enctype="multipart/form-data" class="form">
-        <label>Nome:
-            <input type="text" name="nome" required>
-        </label>
-        <label>Tamanho:
-            <input type="text" name="tamanho" required>
-        </label>
-        <label>Preço:
-            <input type="number" step="0.01" name="preco" required>
-        </label>
-        <label>Faixa Etária:
-            <input type="text" name="faixa_etaria" required>
-        </label>
-        <label>Imagem do Brinquedo:
-            <input type="file" name="imagem" accept="image/*" required>
-        </label>
-        <button type="submit" class="btn">Adicionar</button>
-    </form>
+    <div class="tabs">
+        <button class="tab-button active" onclick="openTab(event, 'brinquedo')">Cadastrar Brinquedo</button>
+        <button class="tab-button" onclick="openTab(event, 'monitor')">Cadastrar Monitor</button>
+    </div>
+
+    <!-- Aba Brinquedo -->
+    <div id="brinquedo" class="tab-content active">
+        <form method="post" enctype="multipart/form-data">
+            <input type="hidden" name="tipo" value="brinquedo">
+            <label>Nome:
+                <input type="text" name="nome" required>
+            </label>
+            <label>Tamanho:
+                <input type="text" name="tamanho" required>
+            </label>
+            <label>Preço:
+                <input type="number" step="0.01" name="preco" required>
+            </label>
+            <label>Faixa Etária:
+                <input type="text" name="faixa_etaria" required>
+            </label>
+            <label>Imagem do Brinquedo:
+                <input type="file" name="imagem" accept="image/*" required>
+            </label>
+            <button type="submit" class="btn">Adicionar Brinquedo</button>
+        </form>
+    </div>
+
+    <!-- Aba Monitor -->
+    <div id="monitor" class="tab-content">
+        <form method="post">
+            <input type="hidden" name="tipo" value="monitor">
+            <label>Nome:
+                <input type="text" name="nome" required>
+            </label>
+            <label>Telefone:
+                <input type="text" name="telefone">
+            </label>
+            <label>Disponível:
+                <select name="disponibilidade">
+                    <option value="1">Sim</option>
+                    <option value="0">Não</option>
+                </select>
+            </label>
+            <button type="submit" class="btn">Adicionar Monitor</button>
+        </form>
+    </div>
 </div>
+
+<script>
+function openTab(evt, tabName) {
+    const contents = document.querySelectorAll('.tab-content');
+    const buttons = document.querySelectorAll('.tab-button');
+    contents.forEach(c => c.classList.remove('active'));
+    buttons.forEach(b => b.classList.remove('active'));
+    document.getElementById(tabName).classList.add('active');
+    evt.currentTarget.classList.add('active');
+}
+</script>

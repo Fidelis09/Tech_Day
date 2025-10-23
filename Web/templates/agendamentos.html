@@ -14,6 +14,14 @@
         <p><strong>Data:</strong> {{ orcamento.data_festa.strftime('%d/%m/%Y') }} - 
            <strong>Hora:</strong> {{ orcamento.hora_festa.strftime('%H:%M') }}</p>
     </div>
+    <p><strong>Monitor:</strong> 
+  {% if orcamento.monitor %}
+    {{ orcamento.monitor.nome }} ({{ orcamento.monitor.telefone }})
+  {% else %}
+    <em>Sem monitor atribuído</em>
+  {% endif %}
+</p>
+
     {% else %}
     <p class="no-data">Nenhum agendamento feito.</p>
     {% endfor %}

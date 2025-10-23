@@ -27,6 +27,17 @@
             </label>
             {% endfor %}
         </div>
+        <label>Selecione o Monitor:
+    <select name="monitor_id" required>
+        <option value="">-- Escolha um monitor --</option>
+        {% for monitor in monitores %}
+        {% if monitor.disponibilidade %}
+        <option value="{{ monitor.id }}">{{ monitor.nome }} ({{ monitor.telefone }})</option>
+        {% endif %}
+        {% endfor %}
+    </select>
+</label>
+
 
         <button type="submit" class="btn">Orçar Festa</button>
     </form>
