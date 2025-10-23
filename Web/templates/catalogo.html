@@ -1,146 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo de Brinquedos</title>
-    <style>
-        html, body { height: 100%; }
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #e6f0ff;
-            min-height: 100vh;
-        }
-        .painel-branco {
-            background: #fff;
-            border-radius: 14px;
-            box-shadow: 0 4px 15px rgba(25, 93, 157, 0.08);
-            width: 100%;
-            height: 100%;
-            min-height: 0;
-            min-width: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: stretch;
-            padding: 32px;
-        }
-        form {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-        .tabela-catalogo {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .scroll-tbody {
-            flex: 1;
-            overflow-y: auto;
-            width: 100%;
-        }
-        th, td {
-            padding: 14px 10px;
-            text-align: center;
-            vertical-align: middle;
-        }
-        thead th {
-            background: #f2f8ff;
-            font-size: 1.1em;
-            color: #195d9d;
-            border-bottom: 2px solid #a2c7e0;
-            position: sticky;
-            top: 0;
-            z-index: 1;
-        }
-        tbody tr {
-            transition: background 0.16s;
-        }
-        tbody tr:hover {
-            background: #f6fbff;
-        }
-        td img {
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(25, 93, 157, 0.12);
-            max-width: 80px;
-            max-height: 80px;
-            object-fit: cover;
-            background: #f6fbff;
-            padding: 8px;
-        }
-        button[type="submit"] {
-            padding: 10px 36px;
-            border-radius: 8px;
-            border: none;
-            background: linear-gradient(90deg, #3fa3ff 0%, #195d9d 100%);
-            color: #fff;
-            font-size: 1.1em;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 15px;
-            box-shadow: 0 2px 6px rgba(25, 93, 157, 0.12);
-            transition: background 0.4s;
-            width: fit-content;
-            align-self: flex-start;
-        }
-        button[type="submit"]:hover {
-            background: linear-gradient(90deg, #0d4182 0%, #3fa3ff 100%);
-        }
-        input[type="checkbox"] {
-            transform: scale(1.4);
-            accent-color: #195d9d;
-            margin: 0 10px;
-        }
-        .scroll-tbody::-webkit-scrollbar {
-            width: 8px;
-            background: #f2f8ff;
-            border-radius: 8px;
-        }
-        .scroll-tbody::-webkit-scrollbar-thumb {
-            background: #f4f4f4;
-            border-radius: 8px;
-        }
-    </style>
-</head>
-<body>
-    <div class="painel-branco">
-        <form method="post" action="/excluir_selecionados">
-            <!-- Títulos Fixos -->
-            <table class="tabela-catalogo">
-                <thead>
-                    <tr>
-                        <th>Selecionar</th>
-                        <th>Brinquedo</th>
-                        <th>Tamanho</th>
-                        <th>Preço (R$)</th>
-                        <th>Faixa Etária</th>
-                        <th>Imagem</th>
-                    </tr>
-                </thead>
-            </table>
-            <!-- LINHAS COM SCROLL INTERNO -->
-            <div class="scroll-tbody">
-                <table class="tabela-catalogo">
-                    <tbody>
-                        {% for brinquedo in brinquedos %}
-                        <tr>
-                            <td><input type="checkbox" name="selecionados" value="{{ brinquedo.id }}"></td>
-                            <td>{{ brinquedo.nome }}</td>
-                            <td>{{ brinquedo.tamanho }}</td>
-                            <td>{{ brinquedo.preco }}</td>
-                            <td>{{ brinquedo.faixa_etaria }}</td>
-                            <td>
-                                <img src="{{ url_for('static', filename='imagens/' ~ brinquedo.caminho_imagem) }}" alt="Foto do brinquedo">
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            <!-- BOTÃO FIXO -->
-            <button type="submit" onclick="return confirm('Deseja excluir os brinquedos selecionados?');">Excluir selecionados</button>
-        </form>
-    </div>
-</body>
-</html>
+<div class="card">
+    <form method="post" action="/excluir_selecionados">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Selecionar</th>
+                    <th>Brinquedo</th>
+                    <th>Tamanho</th>
+                    <th>Preço (R$)</th>
+                    <th>Faixa Etária</th>
+                    <th>Imagem</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for brinquedo in brinquedos %}
+                <tr>
+                    <td><input type="checkbox" name="selecionados" value="{{ brinquedo.id }}"></td>
+                    <td><strong>{{ brinquedo.nome }}</strong></td>
+                    <td>{{ brinquedo.tamanho }}</td>
+                    <td>R$ {{ "%.2f"|format(brinquedo.preco) }}</td>
+                    <td>{{ brinquedo.faixa_etaria }}</td>
+                    <td>
+                        <img src="{{ url_for('static', filename='imagens/' ~ brinquedo.caminho_imagem) }}" class="thumb">
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="submit" class="btn">Excluir Selecionados</button>
+    </form>
+</div>

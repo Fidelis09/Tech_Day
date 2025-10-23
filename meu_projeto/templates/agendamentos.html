@@ -1,10 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Agendamentos{% endblock %}
+{% block content %}
+<style>
+  h2 {
+    text-align: center;
+    color: #1E90FF;
+    margin: 40px 0 30px;
+    font-weight: 700;
+    font-size: 1.8rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .agendamento {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 8px 18px rgba(30, 144, 255, 0.15);
+    padding: 22px 28px;
+    margin: 16px auto 22px;
+    max-width: 700px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+
+  .agendamento:hover {
+    box-shadow: 0 14px 28px rgba(30, 144, 255, 0.25);
+    transform: translateY(-4px);
+  }
+
+  .agendamento p {
+    margin: 8px 0;
+    font-size: 1rem;
+  }
+
+  .agendamento p strong {
+    color: #1E90FF;
+  }
+
+  p.no-agendamentos {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #666;
+    margin-top: 60px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+</style>
+
 <h2>Festas Agendadas</h2>
+
 {% for orcamento in agendados %}
   <div class="agendamento">
     <p><strong>Cliente:</strong> {{ orcamento.nome_cliente }}</p>
     <p><strong>Telefone:</strong> {{ orcamento.telefone }}</p>
     <p><strong>Endereço:</strong> {{ orcamento.endereco }}</p>
-    <p><strong>Brinquedos:</strong>
+    <p><strong>Brinquedos:</strong> 
       {% for b in orcamento.brinquedos %}
         {{ b.nome }}{% if not loop.last %}, {% endif %}
       {% endfor %}
@@ -16,3 +65,4 @@
 {% else %}
   <p class="no-agendamentos">Nenhum agendamento feito.</p>
 {% endfor %}
+{% endblock %}

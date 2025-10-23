@@ -1,25 +1,34 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8" />
-    <title>Sistema Brinquedos</title>
+    <meta charset="UTF-8">
+    <title>{{ page_title }} | Brinquedos Infláveis</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-<div class="container">
-    <nav class="sidebar">
-        <h2>Sistema Brinquedos</h2>
-        <a href="/usuario" class="{{ 'active' if active_page == 'usuario' else '' }}">Usuário</a>
-        <a href="/admin" class="{{ 'active' if active_page == 'admin' else '' }}">Admin</a>
-        <a href="/agendamentos" class="{{ 'active' if active_page == 'agendamentos' else '' }}">Agendamentos</a>
-        <a href="/orcamentos" class="{{ 'active' if active_page == 'orcamentos' else '' }} btn-destacado">Realizar Orçamento</a>
-    </nav>
-    <div class="main-content">
-        <div class="titulo">{{ page_title }}</div>
-        <div class="conteudo">
-            {{ page_content|safe }}
-        </div>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo">
+                <span class="emoji">🎪</span>
+                <h1>Brinquedos Infláveis</h1>
+            </div>
+            <nav>
+                <a href="/usuario" class="{{ 'active' if active_page == 'usuario' else '' }}">🏰 Catálogo</a>
+                <a href="/admin" class="{{ 'active' if active_page == 'admin' else '' }}">🛠 Administrador</a>
+                <a href="/agendamentos" class="{{ 'active' if active_page == 'agendamentos' else '' }}">📅 Agendamentos</a>
+                <a href="/orcamentos" class="{{ 'active' if active_page == 'orcamentos' else '' }}">💌 Orçar Festa</a>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <header class="page-header">
+                <h2>{{ page_title }}</h2>
+            </header>
+            <section class="page-content">
+                {{ page_content|safe }}
+            </section>
+        </main>
     </div>
-</div>
 </body>
 </html>
