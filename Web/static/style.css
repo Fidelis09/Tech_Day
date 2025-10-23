@@ -1,0 +1,231 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #e6f0ff;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 220px;
+    height: 100vh;
+    background: #004080;
+    padding: 30px 0;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 3px 0 8px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+.sidebar h2 {
+    margin-bottom: 2em;
+    font-size: 1.3em;
+}
+.sidebar a {
+    text-decoration: none;
+    color: white;
+    padding: 12px 20px;
+    margin: 8px 0;
+    border-radius: 4px;
+    width: 80%;
+    text-align: center;
+    transition: background 0.3s, color 0.3s;
+    font-weight: 600;
+    display: block;
+}
+.sidebar a:hover {
+    background: #003366;
+}
+.sidebar a.active {
+    background: #3399ff;
+    color: #003366;
+    font-weight: bold;
+}
+.sidebar a.btn-destacado {
+    background: #1E90FF;
+    color: #FFF;
+    font-weight: bold;
+    margin-top: 12px;
+}
+.container {
+    margin-left: 220px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+.main-content {
+    padding: 40px;
+    flex: 1;
+    height: 100vh;
+    box-sizing: border-box;
+}
+.titulo {
+    text-align: center;
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #004080;
+}
+.conteudo {
+    background: white;
+    border-radius: 10px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    max-height: 570px;
+    overflow-y: auto;
+}
+.conteudo::-webkit-scrollbar {
+    width: 8px;
+    background: #f2f8ff;
+    border-radius: 8px;
+}
+.conteudo::-webkit-scrollbar-thumb {
+    background: #f4f4f4;
+    border-radius: 8px;
+}
+
+/* Formulários e cards agendamentos/orçamento */
+form, .agendamento, .painel-branco {
+    max-width: 600px;
+    background: #fff;
+    margin: 40px auto 60px;
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(30, 144, 255, 0.15);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+form h2, .painel-branco h2, .agendamento h2 {
+    text-align: center;
+    color: #1E90FF;
+    margin-bottom: 30px;
+    font-weight: 700;
+    font-size: 1.8rem;
+}
+label {
+    display: block;
+    margin-bottom: 16px;
+    font-weight: 600;
+    color: #333;
+    font-size: 1rem;
+}
+input[type="text"], input[type="date"], input[type="time"], input[type="number"], input[type="file"] {
+    width: 100%;
+    padding: 10px 14px;
+    margin-top: 6px;
+    border: 2px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+input[type="text"]:focus, input[type="date"]:focus, input[type="time"]:focus, input[type="number"]:focus {
+    outline: none;
+    border-color: #1E90FF;
+    box-shadow: 0 0 5px rgba(30, 144, 255, 0.5);
+}
+label.checkbox-label {
+    display: flex;
+    align-items: center;
+    font-weight: normal;
+    margin-bottom: 10px;
+    color: #444;
+    font-size: 0.95rem;
+}
+label.checkbox-label input[type="checkbox"] {
+    margin-right: 10px;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+.checkbox-group-label {
+    font-weight: 600;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 1rem;
+    color: #333;
+    display: block;
+}
+button[type="submit"], input[type="submit"] {
+    background-color: #1E90FF;
+    color: white;
+    border: none;
+    width: 100%;
+    padding: 14px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 25px;
+    box-shadow: 0 5px 12px rgba(30, 144, 255, 0.4);
+}
+button[type="submit"]:hover, input[type="submit"]:hover {
+    background-color: #187bcd;
+}
+.tabela-catalogo {
+    width: 100%;
+    border-collapse: collapse;
+}
+.scroll-tbody {
+    max-height: 340px;
+    overflow-y: auto;
+    width: 100%;
+}
+.scroll-tbody table {
+    border-collapse: collapse;
+    width: 100%;
+}
+th, td {
+    padding: 14px 10px;
+    text-align: center;
+    vertical-align: middle;
+}
+thead th {
+    background: #f2f8ff;
+    font-size: 1.1em;
+    color: #195d9d;
+    border-bottom: 2px solid #a2c7e0;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+tbody tr {
+    transition: background 0.16s;
+}
+tbody tr:hover {
+    background: #f6fbff;
+}
+td img {
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(25, 93, 157, 0.12);
+    max-width: 80px;
+    max-height: 80px;
+    object-fit: cover;
+    background: #f6fbff;
+    padding: 8px;
+}
+.agendamento {
+    max-width: 700px;
+    margin: 16px auto 22px;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+.agendamento:hover {
+    box-shadow: 0 14px 28px rgba(30, 144, 255, 0.25);
+    transform: translateY(-4px);
+}
+.agendamento p {
+    margin: 8px 0;
+    font-size: 1rem;
+}
+.agendamento p strong {
+    color: #1E90FF;
+}
+p.no-agendamentos {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #666;
+    margin-top: 60px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}

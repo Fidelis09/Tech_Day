@@ -1,0 +1,26 @@
+<h2>Realizar Orçamento</h2>
+<form method="POST">
+    <label>Nome do Cliente:
+        <input type="text" name="nome_cliente" required>
+    </label>
+    <label>Telefone:
+        <input type="text" name="telefone">
+    </label>
+    <label>Endereço:
+        <input type="text" name="endereco">
+    </label>
+    <label>Data da Festa:
+        <input type="date" name="data_festa" required>
+    </label>
+    <label>Hora da Festa:
+        <input type="time" name="hora_festa" required>
+    </label>
+    <label class="checkbox-group-label">Selecione os Brinquedos:</label>
+    {% for brinquedo in brinquedos %}
+    <label class="checkbox-label">
+        <input type="checkbox" name="brinquedos" value="{{ brinquedo.id }}">
+        {{ brinquedo.nome }} - R$ {{ "%.2f"|format(brinquedo.preco) }}
+    </label>
+    {% endfor %}
+    <button type="submit">Fazer Orçamento e Agendar Festa</button>
+</form>

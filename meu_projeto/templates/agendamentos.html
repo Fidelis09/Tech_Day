@@ -1,0 +1,18 @@
+<h2>Festas Agendadas</h2>
+{% for orcamento in agendados %}
+  <div class="agendamento">
+    <p><strong>Cliente:</strong> {{ orcamento.nome_cliente }}</p>
+    <p><strong>Telefone:</strong> {{ orcamento.telefone }}</p>
+    <p><strong>Endereço:</strong> {{ orcamento.endereco }}</p>
+    <p><strong>Brinquedos:</strong>
+      {% for b in orcamento.brinquedos %}
+        {{ b.nome }}{% if not loop.last %}, {% endif %}
+      {% endfor %}
+    </p>
+    <p><strong>Valor Total:</strong> R$ {{ "%.2f"|format(orcamento.valor_total) }}</p>
+    <p><strong>Data da Festa:</strong> {{ orcamento.data_festa.strftime('%d/%m/%Y') if orcamento.data_festa else '' }}</p>
+    <p><strong>Hora da Festa:</strong> {{ orcamento.hora_festa.strftime('%H:%M') if orcamento.hora_festa else '' }}</p>
+  </div>
+{% else %}
+  <p class="no-agendamentos">Nenhum agendamento feito.</p>
+{% endfor %}
