@@ -5,33 +5,50 @@
     <title>{{ page_title }} | Brinquedos Infláveis</title>
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+    .card {
+        max-width: 500px;
+        margin: 10px auto 0 auto;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        font-family: 'Poppins', sans-serif;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 14px 40px rgba(0,0,0,0.18);
+    }
+    </style>
 </head>
 <body>
     <div class="container">
         <aside class="sidebar">
             <div class="logo">
                 <img src="{{ url_for('static', filename='imagens/logo.png') }}" alt="Logo Brinquedos Infláveis">
-                <h1>Brinquedos Infláveis</h1>
+                <h1>Loca Fest</h1>
             </div>
             <nav>
-                <a href="/admin" class="{{ 'active' if active_page == 'admin' else '' }}"> Cadastrar Brinquedos</a>
-                <a href="/usuario" class="{{ 'active' if active_page == 'usuario' else '' }}"> Catálogo</a>
-                <a href="/agendamentos" class="{{ 'active' if active_page == 'agendamentos' else '' }}"> Agendamentos</a>
-                <a href="/orcamentos" class="{{ 'active' if active_page == 'orcamentos' else '' }}"> Orçar Festa</a>
+                <a href="/admin" class="{{ 'active' if active_page == 'admin' else '' }}">Cadastrar Brinquedos</a>
+                <a href="/usuario" class="{{ 'active' if active_page == 'usuario' else '' }}">Catálogo</a>
+                <a href="/agendamentos" class="{{ 'active' if active_page == 'agendamentos' else '' }}">Agendamentos</a>
+                <a href="/orcamentos" class="{{ 'active' if active_page == 'orcamentos' else '' }}">Orçar Festa</a>
             </nav>
         </aside>
-
         <main class="content">
             <header class="page-header">
                 {% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    {% for category, message in messages %}
-      <div class="alert alert-{{ category }}">{{ message }}</div>
-    {% endfor %}
-  {% endif %}
-{% endwith %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                {% if active_page not in ['home', 'admin'] %}
+                    <h2>{{ page_title }}</h2>
+                {% endif %}
 
-                <h2>{{ page_title }}</h2>
             </header>
             <section class="page-content">
                 {{ page_content|safe }}

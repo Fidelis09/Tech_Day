@@ -1,48 +1,59 @@
 <style>
 .card {
-    max-width: 480px;
-    margin: 30px auto;
+    max-width: 500px;
+    margin: 40px auto;
     background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    font-family: 'Poppins', sans-serif;
     overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 14px 40px rgba(0,0,0,0.18);
 }
 
 .tabs {
     display: flex;
-    border-bottom: 2px solid #ddd;
-    background-color: #f9f9f9;
+    border-bottom: 3px solid #e0e7ff;
+    background-color: #f3f4ff;
+    user-select: none;
 }
 
 .tab-button {
     flex: 1;
-    padding: 15px 0;
+    padding: 16px 0;
     cursor: pointer;
     border: none;
     background: transparent;
     font-weight: 600;
-    color: #333;
+    color: #4b5563; /* gray-600 */
+    font-size: 15px;
+    letter-spacing: 0.03em;
     transition: color 0.3s, border-bottom 0.3s;
     border-bottom: 3px solid transparent;
-    font-size: 16px;
+    text-transform: uppercase;
 }
 
 .tab-button:hover {
-    color: #1E90FF;
+    color: #1E90FF; /* blue-600 */
 }
 
 .tab-button.active {
-    color: #1E90FF;
+    color: #1E90FF; /* blue-700 */
     border-bottom: 3px solid #1E90FF;
     font-weight: 700;
 }
 
 .tab-content {
-    padding: 20px 30px;
+    padding: 25px 30px;
     display: none;
-    animation: fadeIn 0.3s ease forwards;
-    color: #444;
+    color: #374151; /* gray-700 */
+    font-size: 15px;
+    line-height: 1.5;
+    animation: fadeIn 0.35s ease forwards;
 }
 
 .tab-content.active {
@@ -51,9 +62,10 @@
 
 form label {
     display: block;
-    margin-bottom: 15px;
+    margin-bottom: 16px;
+    color: #374151;
     font-size: 14px;
-    color: #555;
+    font-weight: 600;
 }
 
 form input[type="text"],
@@ -61,11 +73,11 @@ form input[type="number"],
 form input[type="file"],
 form select {
     width: 100%;
-    padding: 8px 12px;
+    padding: 10px 14px;
     font-size: 14px;
-    border: 1.8px solid #ccc;
-    border-radius: 6px;
-    transition: border-color 0.3s;
+    border: 1.5px solid #d1d5db; /* gray-300 */
+    border-radius: 8px;
+    transition: border-color 0.3s, box-shadow 0.3s;
     box-sizing: border-box;
 }
 
@@ -73,32 +85,38 @@ form input[type="text"]:focus,
 form input[type="number"]:focus,
 form input[type="file"]:focus,
 form select:focus {
-    border-color: #1E90FF;
+    border-color: #2563eb; /* blue-600 */
+    box-shadow: 0 0 6px rgba(37, 99, 235, 0.5);
     outline: none;
 }
 
 .btn {
     display: inline-block;
-    background-color: #1E90FF;
+    background-color: #1E90FF; /* blue-600 */
     color: white;
-    padding: 11px 25px;
+    padding: 12px 30px;
     font-size: 15px;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
-    font-weight: 600;
-    transition: background-color 0.3s ease;
-    margin-top: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    margin-top: 15px;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
 }
 
 .btn:hover {
-    background-color: #187bcd;
+    background-color: #1E90FF; 
+    box-shadow: 0 6px 18px rgba(30, 64, 175, 0.5);
 }
 
 @keyframes fadeIn {
-    from {opacity: 0;}
-    to {opacity: 1;}
+    from {opacity: 0; transform: translateY(12px);}
+    to {opacity: 1; transform: translateY(0);}
 }
+
 </style>
 
 <div class="card">

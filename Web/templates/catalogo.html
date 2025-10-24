@@ -1,31 +1,22 @@
-<div class="card">
-    <form method="post" action="/excluir_selecionados">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Selecionar</th>
-                    <th>Brinquedo</th>
-                    <th>Tamanho</th>
-                    <th>Preço (R$)</th>
-                    <th>Faixa Etária</th>
-                    <th>Imagem</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for brinquedo in brinquedos %}
-                <tr>
-                    <td><input type="checkbox" name="selecionados" value="{{ brinquedo.id }}"></td>
-                    <td><strong>{{ brinquedo.nome }}</strong></td>
-                    <td>{{ brinquedo.tamanho }}</td>
-                    <td>R$ {{ "%.2f"|format(brinquedo.preco) }}</td>
-                    <td>{{ brinquedo.faixa_etaria }}</td>
-                    <td>
-                        <img src="{{ url_for('static', filename='imagens/' ~ brinquedo.caminho_imagem) }}" class="thumb">
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <button type="submit" class="btn">Excluir Selecionados</button>
-    </form>
+<form method="post" action="/excluir_selecionados">
+  <div class="catalogo-cards">
+    {% for brinquedo in brinquedos %}
+    <div class="card-brinquedo">
+      <div class="imagem-wrapper">
+        <img src="{{ url_for('static', filename='imagens/' ~ brinquedo.caminho_imagem) }}" alt="Imagem do brinquedo {{ brinquedo.nome }}">
+      </div>
+      <div class="info-brinquedo">
+        <h3>{{ brinquedo.nome }}</h3>
+        <p><strong>Tamanho:</strong> {{ brinquedo.tamanho }}</p>
+        <p><strong>Faixa Etária:</strong> {{ brinquedo.faixa_etaria }}</p>
+        <p class="preco">R$ {{ '%.2f'|format(brinquedo.preco) }}</p>
+        <label>
+          <input type="checkbox" name="selecionados" value="{{ brinquedo.id }}"> Selecionar
+        </label>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <button type="submit" class="btn">Excluir Selecionados</button>
+</form>
 </div>
