@@ -211,13 +211,6 @@ def pagina_financeiro():
         page_content=page_content
     )
 
-    return render_template(
-        'home.html',
-        active_page='financeiro',
-        page_title='Financeiro',
-        page_content=page_content
-    )
-
 # Listagem de Agendamentos
 @app.route('/agendamentos')
 def pagina_agendamentos():
