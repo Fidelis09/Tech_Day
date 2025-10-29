@@ -1,0 +1,63 @@
+<div class="card">
+  <h3>📊 Dashboard — {{ '%02d' % mes }}/{{ ano }}</h3>
+
+  <div class="dashboard-grid">
+    <div class="metric">
+      <h4>Quantidade de Festas (mês)</h4>
+      <p class="metric-value">{{ festas_mes }}</p>
+    </div>
+
+    <div class="metric">
+      <h4>Monitores com mais trabalhos</h4>
+      <ul class="list-ranking">
+        {% for m in monitores_top %}
+          <li><span>{{ m.nome }}</span> <strong>{{ m.qtd }}</strong></li>
+        {% else %}
+          <li>Sem dados no período.</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="metric">
+      <h4>Clientes que mais locaram</h4>
+      <ul class="list-ranking">
+        {% for c in clientes_top %}
+          <li><span>{{ c.nome or '—' }}</span> <strong>{{ c.qtd }}</strong></li>
+        {% else %}
+          <li>Sem dados no período.</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="metric">
+      <h4>Brinquedos mais locados (com valor)</h4>
+      <ul class="list-ranking">
+        {% for b in brinquedos_top %}
+          <li>
+            <span>{{ b.nome }}</span>
+            <strong>{{ b.qtd }} • R$ {{ '%.2f'|format(b.valor_mes or 0) }}</strong>
+          </li>
+        {% else %}
+          <li>Sem dados no período.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <!-- Filtro opcional por mês/ano para navegação rápida -->
+  <form method="get" action="/" class="filtro-financeiro" style="margin-top:16px;">
+    <label for="mes">Mês:</label>
+    <select name="mes" id="mes">
+      {% for i in range(1, 13) %}
+        <option value="{{ i }}" {% if i == mes %}selected{% endif %}>
+          {{ ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'][i-1] }}
+        </option>
+      {% endfor %}
+    </select>
+
+    <label for="ano">Ano:</label>
+    <input type="number" name="ano" id="ano" value="{{ ano }}">
+
+    <button type="submit">🔍 Filtrar</button>
+  </form>
+</div>

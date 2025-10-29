@@ -5,7 +5,6 @@ from flask import render_template, request, redirect, url_for, current_app, flas
 from storage import Orcamento, db, Brinquedo, Monitor
 from werkzeug.utils import secure_filename
 
-
 # Cadastro de Brinquedo (Admin)
 @app.route('/admin', methods=['GET', 'POST'])
 def pagina_admin():
@@ -48,7 +47,6 @@ def pagina_admin():
         page_content=page_content
     )
 
-
 # Exclusão de Brinquedos Selecionados
 @app.route('/excluir_selecionados', methods=['POST'])
 def excluir_selecionados():
@@ -64,17 +62,96 @@ def excluir_selecionados():
     flash("Brinquedos selecionados excluídos com sucesso.", "success")
     return redirect('/usuario')
 
-
-# Página Inicial/Menu
+# Página Inicial / Dashboard
 @app.route('/')
 def home():
+    hoje = datetime.date.today()
+    mes = request.args.get('mes', type=int, default=hoje.month)
+    ano = request.args.get('ano', type=int, default=hoje.year)
+
+    # Quantidade de festas (mês)
+    festas_mes = (
+        Orcamento.query
+        .filter(
+            db.extract('month', Orcamento.data_festa) == mes,
+            db.extract('year', Orcamento.data_festa) == ano,
+            Orcamento.agendado == True
+        )
+        .count()
+    )
+
+    # Monitores com mais trabalhos (mês)
+    monitores_top = (
+        db.session.query(
+            Monitor.nome.label('nome'),
+            db.func.count(Orcamento.id).label('qtd')
+        )
+        .join(Orcamento, Orcamento.monitor_id == Monitor.id)
+        .filter(
+            db.extract('month', Orcamento.data_festa) == mes,
+            db.extract('year', Orcamento.data_festa) == ano,
+            Orcamento.agendado == True
+        )
+        .group_by(Monitor.id)
+        .order_by(db.desc('qtd'))
+        .limit(5)
+        .all()
+    )
+
+    # Clientes que mais locaram (mês)
+    clientes_top = (
+        db.session.query(
+            Orcamento.nome_cliente.label('nome'),
+            db.func.count(Orcamento.id).label('qtd')
+        )
+        .filter(
+            db.extract('month', Orcamento.data_festa) == mes,
+            db.extract('year', Orcamento.data_festa) == ano,
+            Orcamento.agendado == True
+        )
+        .group_by(Orcamento.nome_cliente)
+        .order_by(db.desc('qtd'))
+        .limit(5)
+        .all()
+    )
+
+    # Brinquedos mais locados (mês) + valor no mês
+    # Observação: usa o relacionamento Orcamento.brinquedos (many-to-many)
+    brinquedos_top = (
+        db.session.query(
+            Brinquedo.nome.label('nome'),
+            db.func.count(Orcamento.id).label('qtd'),
+            db.func.sum(Brinquedo.preco).label('valor_mes')
+        )
+        .select_from(Orcamento)
+        .join(Orcamento.brinquedos)  # requer relacionamento definido no modelo
+        .filter(
+            db.extract('month', Orcamento.data_festa) == mes,
+            db.extract('year', Orcamento.data_festa) == ano,
+            Orcamento.agendado == True
+        )
+        .group_by(Brinquedo.id)
+        .order_by(db.desc('qtd'))
+        .limit(5)
+        .all()
+    )
+
+    page_content = render_template(
+        'dashboard.html',
+        mes=mes,
+        ano=ano,
+        festas_mes=festas_mes,
+        monitores_top=monitores_top,
+        clientes_top=clientes_top,
+        brinquedos_top=brinquedos_top
+    )
+
     return render_template(
         'home.html',
         active_page='home',
-        page_title='Bem-vindo!',
-        page_content='<p>Escolha uma das opções no menu ao lado para começar.</p>'
+        page_title='Dashboard',
+        page_content=page_content
     )
-
 
 # Catálogo do Usuário
 @app.route('/usuario')
@@ -87,7 +164,6 @@ def pagina_usuario():
         page_title='Catálogo de Brinquedos',
         page_content=page_content
     )
-
 
 # Cadastro de Orçamento/Agendamento
 @app.route('/orcamentos', methods=['GET', 'POST'])
@@ -110,14 +186,14 @@ def orcamentos():
 
         monitor = Monitor.query.get(monitor_id)
 
-        # 🔹 Verifica se o monitor já tem festa nesta data
+        # Verifica se o monitor já tem festa nesta data
         ja_agendado = any(o.data_festa == data_festa for o in monitor.orcamentos)
 
         if ja_agendado:
             flash(f"O monitor {monitor.nome} já está agendado para esta data.", "error")
             return redirect('/orcamentos')
 
-        # 🔹 Cria o novo orçamento normalmente
+        # Cria o novo orçamento
         orcamento = Orcamento(
             nome_cliente=nome_cliente,
             telefone=telefone,
@@ -144,10 +220,7 @@ def orcamentos():
         page_content=page_content
     )
 
-
-# =============================================================
 # 💰 ROTA: /financeiro — Painel financeiro simplificado
-# =============================================================
 import datetime
 from flask import render_template, request
 from storage import Orcamento, db
@@ -158,7 +231,7 @@ def pagina_financeiro():
     mes = request.args.get('mes', type=int, default=hoje.month)
     ano = request.args.get('ano', type=int, default=hoje.year)
 
-    # ---------- RECEITAS E GASTOS ----------
+    # RECEITAS E GASTOS
     receitas_mes = db.session.query(
         db.func.sum(Orcamento.valor_total)
     ).filter(
@@ -176,7 +249,7 @@ def pagina_financeiro():
     lucro_bruto = receitas_mes
     lucro_liquido = receitas_mes - gastos_monitores
 
-    # ---------- ESTATÍSTICAS MENSAIS ----------
+    # ESTATÍSTICAS MENSAIS
     meses = []
     lucros_mensais = []
     for m in range(1, 13):
