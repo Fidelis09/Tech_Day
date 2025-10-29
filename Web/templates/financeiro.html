@@ -1,109 +1,98 @@
 <div class="financeiro-container">
-    <h2>📊 Resumo Financeiro</h2>
+    <h2>💰 Painel Financeiro</h2>
 
+    <!-- ======== BLOCOS DE RESUMO ======== -->
     <div class="cards-financeiro">
         <div class="card-fin">
-            <h3>Receitas Totais</h3>
-            <p class="valor positivo">R$ {{ "{:,.2f}".format(receitas) }}</p>
+            <h3>Lucro Bruto (Mês)</h3>
+            <p>R$ {{ "{:,.2f}".format(lucro_bruto) }}</p>
         </div>
 
         <div class="card-fin">
-            <h3>Despesas</h3>
-            <p class="valor negativo">R$ {{ "{:,.2f}".format(despesas) }}</p>
+            <h3>Lucro Líquido (Mês)</h3>
+            <p>R$ {{ "{:,.2f}".format(lucro_liquido) }}</p>
         </div>
 
         <div class="card-fin">
-            <h3>Lucro Líquido</h3>
-            <p class="valor destaque">R$ {{ "{:,.2f}".format(lucro) }}</p>
+            <h3>Gastos com Monitores</h3>
+            <p>R$ {{ "{:,.2f}".format(gastos_monitores) }}</p>
+        </div>
+
+        <div class="card-fin">
+            <h3>Previsão de Receita Futura</h3>
+            <p>R$ {{ "{:,.2f}".format(receitas_futuras) }}</p>
         </div>
     </div>
 
-    <hr>
-
-    <h3>📅 Últimos Agendamentos</h3>
-    
-<table class="tabela-fin">
-    <thead>
-        <tr>
-            <th>Cliente</th>
-            <th>Data</th>
-            <th>Valor</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for o in ultimos_agendamentos %}
-        <tr>
-            <td>{{ o.nome_cliente }}</td>
-            <td>{{ o.data_festa.strftime('%d/%m/%Y') }}</td>
-            <td>R$ {{ "{:,.2f}".format(o.valor_total) }}</td>
-        </tr>
-        {% else %}
-        <tr>
-            <td colspan="3">Nenhum agendamento encontrado.</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
+    <!-- ======== GRÁFICO DE LUCROS MENSAIS ======== -->
+    <div class="grafico-container">
+        <h3>📈 Estatísticas de Lucro Mensal</h3>
+        <canvas id="graficoLucro"></canvas>
+    </div>
 </div>
 
+<!-- ======== ESTILOS ======== -->
 <style>
 .financeiro-container {
-    padding: 1rem 2rem;
+    padding: 20px;
 }
-
 .cards-financeiro {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin: 1rem 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
 }
-
 .card-fin {
-    flex: 1;
-    min-width: 200px;
     background: #fff;
-    padding: 1.2rem;
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 20px;
     text-align: center;
 }
-
 .card-fin h3 {
-    color: #1976d2;
-    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    color: #555;
 }
-
-.valor {
+.card-fin p {
     font-size: 1.4rem;
-    font-weight: 600;
+    font-weight: bold;
+    color: #2e8b57;
 }
-
-.valor.positivo { color: #2e7d32; }
-.valor.negativo { color: #c62828; }
-.valor.destaque { color: #1565c0; }
-
-.tabela-fin {
-    width: 100%;
-    border-collapse: collapse;
+.grafico-container {
     background: #fff;
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-.tabela-fin th, .tabela-fin td {
-    padding: 0.8rem;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
-
-.tabela-fin th {
-    background: #1976d2;
-    color: white;
-    font-weight: 600;
-}
-
-.tabela-fin tr:hover {
-    background: #f1f1f1;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    padding: 20px;
+    margin-bottom: 30px;
 }
 </style>
+
+<!-- ======== CHART.JS ======== -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const meses = JSON.parse('{{ meses | tojson | safe }}');
+const lucros = JSON.parse('{{ lucros_mensais | tojson | safe }}');
+
+// Gráfico de lucros mensais
+new Chart(document.getElementById('graficoLucro'), {
+    type: 'line',
+    data: {
+        labels: meses,
+        datasets: [{
+            label: 'Lucro Mensal (R$)',
+            data: lucros,
+            borderColor: '#2e8b57',
+            backgroundColor: 'rgba(46,139,87,0.2)',
+            fill: true,
+            tension: 0.3
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { position: 'bottom' },
+            tooltip: { mode: 'index', intersect: false }
+        }
+    }
+});
+</script>

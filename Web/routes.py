@@ -145,29 +145,59 @@ def orcamentos():
     )
 
 
-
-# Exibe resumo de receitas, despesas e lucro total.
 # =============================================================
-# =============================================================
-# 💰 ROTA: /financeiro — Controle financeiro
+# 💰 ROTA: /financeiro — Painel financeiro simplificado
 # =============================================================
 @app.route('/financeiro')
 def pagina_financeiro():
-    # Total de receitas (soma dos orçamentos)
-    receitas = db.session.query(db.func.sum(Orcamento.valor_total)).scalar() or 0.0
-    despesas = 0.0  # (pode ser expandido depois)
-    lucro = receitas - despesas
+    hoje = datetime.date.today()
+    mes_atual = hoje.month
+    ano_atual = hoje.year
 
-    # Busca os últimos 5 agendamentos
-    ultimos_agendamentos = Orcamento.query.order_by(Orcamento.data_festa.desc()).limit(5).all()
+    # ---------- RECEITAS E GASTOS DO MÊS ----------
+    receitas_mes = db.session.query(
+        db.func.sum(Orcamento.valor_total)
+    ).filter(
+        db.extract('month', Orcamento.data_festa) == mes_atual,
+        db.extract('year', Orcamento.data_festa) == ano_atual
+    ).scalar() or 0.0
 
-    # Renderiza o conteúdo da aba financeiro
+    gasto_por_monitor = 150.0
+    eventos_mes = Orcamento.query.filter(
+        db.extract('month', Orcamento.data_festa) == mes_atual,
+        db.extract('year', Orcamento.data_festa) == ano_atual
+    ).count()
+    gastos_monitores = eventos_mes * gasto_por_monitor
+
+    lucro_bruto = receitas_mes
+    lucro_liquido = receitas_mes - gastos_monitores
+
+    # ---------- ESTATÍSTICAS MENSAIS ----------
+    meses = []
+    lucros_mensais = []
+    for m in range(1, 13):
+        total = db.session.query(db.func.sum(Orcamento.valor_total)).filter(
+            db.extract('month', Orcamento.data_festa) == m,
+            db.extract('year', Orcamento.data_festa) == ano_atual
+        ).scalar() or 0.0
+        meses.append(datetime.date(ano_atual, m, 1).strftime('%b'))
+        lucros_mensais.append(float(total))
+
+    # ---------- PREVISÃO DE RECEITA FUTURA ----------
+    receitas_futuras = db.session.query(
+        db.func.sum(Orcamento.valor_total)
+    ).filter(
+        Orcamento.data_festa > hoje
+    ).scalar() or 0.0
+
     page_content = render_template(
         'financeiro.html',
-        receitas=receitas,
-        despesas=despesas,
-        lucro=lucro,
-        ultimos_agendamentos=ultimos_agendamentos  # <-- PASSA AQUI
+        lucro_bruto=lucro_bruto,
+        lucro_liquido=lucro_liquido,
+        gastos_monitores=gastos_monitores,
+        receitas_futuras=receitas_futuras,
+        meses=meses,
+        lucros_mensais=lucros_mensais
     )
 
     return render_template(
@@ -176,7 +206,6 @@ def pagina_financeiro():
         page_title='Financeiro',
         page_content=page_content
     )
-
 
 # Listagem de Agendamentos
 @app.route('/agendamentos')
