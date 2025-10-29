@@ -1,51 +1,91 @@
+/* ========================================================================== */
+/* Fonte */
+/* ========================================================================== */
+
+/* Importa a família de fontes Poppins (400 e 600) do Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
+
+/* ========================================================================== */
+/* Base / Globais */
+/* ========================================================================== */
+
 body {
+    /* Zera margens padrão do navegador */
     margin: 0;
+    /* Define tipografia base */
     font-family: 'Poppins', sans-serif;
+    /* Cor de fundo clara e suave */
     background: #f6f9fc;
+    /* Cor de texto principal */
     color: #333;
 }
 
+/* Contêiner raiz para layout em duas colunas (sidebar + conteúdo) */
 .container {
+    /* Layout flex para posicionar sidebar e conteúdo */
     display: flex;
+    /* Garante altura mínima igual à altura da janela */
     min-height: 100vh;
 }
 
-/* ======= SIDEBAR ======= */
+
+/* ========================================================================== */
+/* Sidebar (menu lateral) */
+/* ========================================================================== */
+
 .sidebar {
+    /* Largura fixa da barra lateral */
     width: 260px;
+    /* Degradê azul vertical de fundo */
     background: linear-gradient(180deg, #1976d2, #42a5f5);
+    /* Texto branco para contraste */
     color: white;
+    /* Espaçamento interno */
     padding: 2rem 1rem;
+    /* Empilha itens verticalmente */
     display: flex;
     flex-direction: column;
+    /* Distribui topo e base (logo/menu e rodapé) */
     justify-content: space-between;
+    /* Fixa a sidebar na lateral esquerda */
     position: fixed;
     left: 0;
     top: 0;
+    /* Ocupa toda a altura da janela */
     height: 100vh;
+    /* Inclui padding na largura/altura total */
     box-sizing: border-box;
 }
 
+/* Área de logo no topo da sidebar */
 .sidebar .logo {
+    /* Centraliza conteúdo do logo */
     text-align: center;
+    /* Espaço inferior do logo */
     padding-bottom: 1rem;
 }
 
+/* Imagem do logo com efeito ao passar o mouse */
 .sidebar .logo img {
+    /* Limita largura do logo */
     max-width: 150px;
     height: auto;
+    /* Centraliza imagem em bloco */
     display: block;
     margin: 0 auto;
+    /* Anima transformações (hover) */
     transition: transform 0.3s ease;
+    /* Cursor de clique para logo */
     cursor: pointer;
 }
 
+/* Efeito de destaque no logo ao hover */
 .sidebar .logo img:hover {
     transform: scale(1.1) rotate(5deg);
 }
 
+/* Título da marca na sidebar */
 .sidebar .logo h1 {
     margin-top: 0.5rem;
     color: white;
@@ -53,54 +93,221 @@ body {
     font-size: 1.25rem;
 }
 
+/* Navegação vertical na sidebar */
 .sidebar nav {
     display: flex;
     flex-direction: column;
     margin-top: 2rem;
 }
 
+/* Links da navegação */
 .sidebar a {
     color: white;
     text-decoration: none;
     padding: 0.8rem 1rem;
     margin: 0.2rem 0;
     border-radius: 8px;
+    /* Suaviza a mudança de fundo no hover/active */
     transition: background 0.3s;
 }
 
+/* Estado hover e item ativo com leve destaque */
 .sidebar a:hover,
 .sidebar a.active {
     background: rgba(255, 255, 255, 0.2);
 }
 
-/* ======= CONTEÚDO PRINCIPAL ======= */
+
+/* ========================================================================== */
+/* Conteúdo principal */
+/* ========================================================================== */
+
 .content {
+    /* Permite ocupar o espaço restante ao lado da sidebar */
     flex-grow: 1;
+    /* Compensa a largura da sidebar fixa para evitar sobreposição */
     margin-left: 260px;
+    /* Largura calculada para preencher a viewport menos a sidebar */
     width: calc(100vw - 260px);
+    /* Garante que o conteúdo ocupe a altura da viewport */
     height: 100vh;
+    /* Layout vertical interno */
     display: flex;
     flex-direction: column;
+    /* Habilita rolagem vertical do conteúdo */
     overflow-y: auto;
+    /* Espaçamento interno */
     padding: 2rem;
     box-sizing: border-box;
 }
 
+
+/* ========================================================================== */
+/* Home.html (estilo inline do .card do arquivo) */
+/* Observação: este bloco replica exatamente o estilo inline informado.       */
+/* ========================================================================== */
+
 .card {
+    max-width: 500px;
+    margin: 10px auto 0 auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    font-family: 'Poppins', sans-serif;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 14px 40px rgba(0,0,0,0.18);
+}
+
+
+/* ========================================================================== */
+/* Admin (admin.html) */
+/* ========================================================================== */
+
+.admin-card {
+    max-width: 500px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    font-family: 'Poppins', sans-serif;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.admin-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 14px 40px rgba(0,0,0,0.18);
+}
+
+.tabs {
+    display: flex;
+    border-bottom: 3px solid #e0e7ff;
+    background-color: #f3f4ff;
+    user-select: none;
+}
+
+.tab-button {
+    flex: 1;
+    padding: 16px 0;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    font-weight: 600;
+    color: #4b5563; /* gray-600 */
+    font-size: 15px;
+    letter-spacing: 0.03em;
+    transition: color 0.3s, border-bottom 0.3s;
+    border-bottom: 3px solid transparent;
+    text-transform: uppercase;
+}
+
+.tab-button:hover {
+    color: #1E90FF; /* blue-600 */
+}
+
+.tab-button.active {
+    color: #1E90FF; /* blue-700 */
+    border-bottom: 3px solid #1E90FF;
+    font-weight: 700;
+}
+
+.tab-content {
+    padding: 25px 30px;
+    display: none;
+    color: #374151; /* gray-700 */
+    font-size: 15px;
+    line-height: 1.5;
+    animation: fadeIn 0.35s ease forwards;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+form label {
+    display: block;
+    margin-bottom: 16px;
+    color: #374151;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+form input[type="text"],
+form input[type="number"],
+form input[type="file"],
+form select {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 14px;
+    border: 1.5px solid #d1d5db; /* gray-300 */
+    border-radius: 8px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    box-sizing: border-box;
+}
+
+form input[type="text"]:focus,
+form input[type="number"]:focus,
+form input[type="file"]:focus,
+form select:focus {
+    border-color: #2563eb; /* blue-600 */
+    box-shadow: 0 0 6px rgba(37, 99, 235, 0.5);
+    outline: none;
+}
+
+.btn {
+    display: inline-block;
+    background-color: #1E90FF; /* blue-600 */
+    color: white;
+    padding: 12px 30px;
+    font-size: 15px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    margin-top: 15px;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+@keyframes fadeIn {
+    from {opacity: 0; transform: translateY(12px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+
+
+/* ========================================================================== */
+/* Card genérico (catalogo, agendamentos, orcamento) */
+/* ========================================================================== */
+
+.card {
+    /* Largura máxima do card */
     max-width: 600px;
-    margin: 18px auto 0 auto; /* centralizado horizontalmente e espaço no topo */
+    /* Centraliza e dá espaço superior */
+    margin: 18px auto 0 auto;
+    /* Espaçamento interno */
     padding: 2rem;
+    /* Fundo branco com cantos arredondados */
     background: white;
     border-radius: 12px;
+    /* Sombra suave azulada */
     box-shadow: 0 10px 20px rgba(30, 144, 255, 0.15);
+    /* Transições para hover */
     transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
+/* Elevação sutil no hover do card */
 .card:hover {
     box-shadow: 0 14px 30px rgba(30, 144, 255, 0.3);
     transform: translateY(-6px);
 }
 
+/* Título dentro do card */
 .card h3 {
     text-align: center;
     color: #1E90FF;
@@ -109,51 +316,71 @@ body {
     font-size: 1.8rem;
 }
 
+
+/* ========================================================================== */
+/* Agendamentos (agendamentos.html) */
+/* ========================================================================== */
+
 .agendamento {
+    /* Fundo claro com borda azul clara */
     background: #f9fbff;
     border: 1px solid #a9c9ff;
     border-radius: 10px;
+    /* Espaçamento */
     padding: 1.5rem 1.8rem;
     margin-bottom: 1.5rem;
+    /* Sombra leve */
     box-shadow: 0 3px 8px rgba(30, 144, 255, 0.1);
+    /* Transição de fundo no hover */
     transition: background 0.3s ease;
 }
 
+/* Realce ao passar o mouse */
 .agendamento:hover {
     background: #e3f0ff;
 }
 
+/* Parágrafos internos de agendamento */
 .agendamento p {
     margin: 0.4rem 0;
     color: #333;
     font-size: 1rem;
 }
 
+/* Tag/Chip de brinquedo */
 .tag {
+    /* Exibição em linha como chip */
     display: inline-block;
     background-color: #1976d2;
     color: white;
+    /* Padding e espaçamentos entre chips */
     padding: 0.25rem 0.6rem;
     margin-right: 6px;
     margin-bottom: 0.2rem;
+    /* Bordas arredondadas tipo pílula */
     border-radius: 18px;
     font-size: 0.85rem;
     font-weight: 600;
+    /* Evita seleção de texto */
     user-select: none;
+    /* Suaviza a transição de cor no hover */
     transition: background-color 0.3s ease;
 }
 
+/* Escurece levemente no hover (sem virar botão clicável) */
 .tag:hover {
     background-color: #115293;
     cursor: default;
 }
 
+/* Valor/destaque em vermelho (ex.: preço) */
 .valor {
     font-weight: 700;
     color: #d32f2f;
     font-size: 1.1rem;
 }
 
+/* Mensagem para estados sem dados */
 .no-data {
     color: #999;
     font-style: italic;
@@ -162,57 +389,80 @@ body {
     font-size: 1.1rem;
 }
 
+
+/* ========================================================================== */
+/* Catálogo (catalogo.html) */
+/* ========================================================================== */
+
 .catalogo-cards {
+    /* Altura limitada para caber na viewport com rolagem */
     max-height: calc(100vh - 150px);
     overflow-y: auto;
+    /* Evita sobreposição do scrollbar no layout */
     padding-right: 0.5rem;
+    /* Grade responsiva de cards */
     display: grid;
     gap: 1.8rem;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     margin-bottom: 1rem;
 }
 
+/* Card individual de brinquedo */
 .card-brinquedo {
     background: white;
     border-radius: 12px;
+    /* Sombra e transições de elevação */
     box-shadow: 0 6px 14px rgba(30, 144, 255, 0.2);
     transition: box-shadow 0.3s ease, transform 0.2s ease;
+    /* Layout vertical para imagem + info */
     display: flex;
     flex-direction: column;
+    /* Oculta transbordo (bordas arredondadas) */
     overflow: hidden;
+    /* Indica interatividade */
     cursor: pointer;
 }
 
+/* Realce no hover do card de brinquedo */
 .card-brinquedo:hover {
     box-shadow: 0 10px 20px rgba(30, 144, 255, 0.35);
     transform: translateY(-5px);
 }
 
+/* Moldura da imagem do card */
 .imagem-wrapper {
     height: 180px;
     overflow: hidden;
+    /* Barra decorativa inferior azul */
     border-bottom: 3px solid #1E90FF;
 }
 
+/* Imagem responsiva cobrindo o wrapper */
 .imagem-wrapper img {
     width: 100%;
     height: 100%;
+    /* Cobre mantendo proporção, cortando excedente */
     object-fit: cover;
+    /* Suaviza efeito de zoom */
     transition: transform 0.4s ease;
 }
 
+/* Leve zoom na imagem ao passar o mouse no card */
 .card-brinquedo:hover .imagem-wrapper img {
     transform: scale(1.05);
 }
 
+/* Área de informações do brinquedo */
 .info-brinquedo {
     padding: 1.2rem 1rem;
+    /* Empurra o rodapé para baixo se houver */
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 }
 
+/* Título do brinquedo */
 .info-brinquedo h3 {
     margin: 0 0 0.6rem 0;
     color: #1E90FF;
@@ -220,12 +470,14 @@ body {
     font-size: 1.3rem;
 }
 
+/* Textos informativos do brinquedo */
 .info-brinquedo p {
     margin: 0.3rem 0;
     font-size: 0.95rem;
     color: #333;
 }
 
+/* Preço em destaque */
 .preco {
     margin-top: 1rem;
     font-size: 1.2rem;
@@ -233,6 +485,12 @@ body {
     color: #d32f2f;
 }
 
+
+/* ========================================================================== */
+/* Controles / Inputs gerais */
+/* ========================================================================== */
+
+/* Label com alinhamento para checkbox ao lado */
 label {
     margin-top: 1rem;
     font-size: 0.9rem;
@@ -241,6 +499,7 @@ label {
     cursor: pointer;
 }
 
+/* Tamanho e espaçamento do checkbox genérico */
 label input[type="checkbox"] {
     margin-right: 8px;
     width: 18px;
@@ -248,38 +507,46 @@ label input[type="checkbox"] {
     cursor: pointer;
 }
 
-/* Botão excluir dentro do form alinhado */
+/* Botão de excluir dentro de formulários alinhado à esquerda */
 form > .btn {
     align-self: flex-start;
     margin-top: auto;
 }
 
-/* ======= FORMULÁRIO DE ORÇAMENTO ======= */
+
+/* ========================================================================== */
+/* Formulário de Orçamento (orcamento.html) */
+/* ========================================================================== */
 
 .form-container {
+    /* Envolve o formulário e o alinha à direita */
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    /* Altura mínima da viewport para centralização vertical */
     min-height: 100vh;
     width: 100%;
     padding: 2rem;
     box-sizing: border-box;
 }
 
+/* Bloco do formulário principal */
 .form {
     width: 100%;
     max-width: 600px;
     background: white;
     padding: 2rem;
     border-radius: 10px;
+    /* Sombra leve para destaque */
     box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
+    /* Centraliza horizontalmente dentro do container */
     margin: 0 auto;
 }
 
-
+/* Labels do formulário em coluna (rótulo acima do input) */
 .form label {
     margin-bottom: 1rem;
     font-weight: 600;
@@ -288,6 +555,7 @@ form > .btn {
     flex-direction: column;
 }
 
+/* Campos de texto, data, hora e selects */
 .form input[type="text"],
 .form input[type="date"],
 .form input[type="time"],
@@ -301,7 +569,7 @@ form > .btn {
     box-sizing: border-box;
 }
 
-/* Grupo de checkboxes responsivo */
+/* Grupo de checkboxes responsivo (multi-linha) */
 .checkbox-group {
     display: flex;
     flex-wrap: wrap;
@@ -309,6 +577,7 @@ form > .btn {
     margin-top: 0.5rem;
 }
 
+/* Item individual de checkbox estilizado como chip */
 .checkbox-item {
     background: #f1f7ff;
     padding: 0.6rem 1rem;
@@ -318,10 +587,12 @@ form > .btn {
     display: flex;
     align-items: center;
     cursor: pointer;
+    /* Ocupa ~45% para formar duas colunas em telas médias */
     flex: 1 1 45%;
     box-sizing: border-box;
 }
 
+/* Tamanho do input checkbox dentro do chip */
 .checkbox-item input[type="checkbox"] {
     margin-right: 0.5rem;
     width: 18px;
@@ -329,7 +600,11 @@ form > .btn {
     cursor: pointer;
 }
 
-/* Botões */
+
+/* ========================================================================== */
+/* Botões (genérico) */
+/* ========================================================================== */
+
 .btn {
     margin-top: 1.5rem;
     background-color: #1E90FF;
@@ -339,40 +614,52 @@ form > .btn {
     border-radius: 8px;
     font-weight: 700;
     cursor: pointer;
+    /* Suaviza troca de cor ao hover */
     transition: background-color 0.3s ease;
     display: inline-block;
 }
 
+/* Hover do botão principal */
 .btn:hover {
     background-color: #0f5ec3;
 }
 
-/* ======= RESPONSIVIDADE ======= */
+
+/* ========================================================================== */
+/* Responsividade */
+/* ========================================================================== */
+
 @media (max-width: 768px) {
+    /* Sidebar vira barra superior responsiva */
     .sidebar {
         position: relative;
         width: 100%;
         height: auto;
+        /* Navegação em linha na horizontal */
         flex-direction: row;
         justify-content: space-around;
         padding: 1rem;
     }
 
+    /* Conteúdo ocupa 100% e ajusta a altura */
     .content {
         margin-left: 0;
         width: 100%;
         height: calc(100vh - 80px);
     }
 
+    /* Card com padding menor e rolagem horizontal opcional */
     .card {
         padding: 1rem;
         overflow-x: scroll;
     }
 
+    /* Tabela responsiva: esconde o cabeçalho */
     .table thead {
         display: none;
     }
 
+    /* Células viram blocos com rótulos simulando cabeçalhos */
     .table tbody td {
         display: block;
         text-align: right;
@@ -383,6 +670,7 @@ form > .btn {
         margin-bottom: 0.75rem;
     }
 
+    /* Rótulos gerados via data-label para cada célula */
     .table tbody td::before {
         content: attr(data-label);
         position: absolute;
@@ -395,27 +683,36 @@ form > .btn {
         white-space: nowrap;
     }
 
+    /* Linhas da tabela viram cartões separados */
     .table tbody tr {
         display: block;
         margin-bottom: 1.5rem;
         border-radius: 8px;
     }
 
+    /* Form ocupa largura total com padding reduzido */
     .form {
         max-width: 100%;
         padding: 1.5rem;
     }
 
+    /* Checkboxes ocupam toda a largura (uma coluna) */
     .checkbox-item {
         flex: 1 1 100%;
     }
 }
 
-/* Scrollbar customizado */
+
+/* ========================================================================== */
+/* Scrollbar (WebKit) */
+/* ========================================================================== */
+
+/* Largura do trilho da barra de rolagem */
 ::-webkit-scrollbar {
     width: 8px;
 }
 
+/* Polegar (thumb) da scrollbar com cor e raio */
 ::-webkit-scrollbar-thumb {
     background-color: rgba(0, 0, 0, 0.2);
     border-radius: 4px;

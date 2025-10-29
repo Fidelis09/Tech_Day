@@ -1,0 +1,109 @@
+<div class="financeiro-container">
+    <h2>📊 Resumo Financeiro</h2>
+
+    <div class="cards-financeiro">
+        <div class="card-fin">
+            <h3>Receitas Totais</h3>
+            <p class="valor positivo">R$ {{ "{:,.2f}".format(receitas) }}</p>
+        </div>
+
+        <div class="card-fin">
+            <h3>Despesas</h3>
+            <p class="valor negativo">R$ {{ "{:,.2f}".format(despesas) }}</p>
+        </div>
+
+        <div class="card-fin">
+            <h3>Lucro Líquido</h3>
+            <p class="valor destaque">R$ {{ "{:,.2f}".format(lucro) }}</p>
+        </div>
+    </div>
+
+    <hr>
+
+    <h3>📅 Últimos Agendamentos</h3>
+    
+<table class="tabela-fin">
+    <thead>
+        <tr>
+            <th>Cliente</th>
+            <th>Data</th>
+            <th>Valor</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for o in ultimos_agendamentos %}
+        <tr>
+            <td>{{ o.nome_cliente }}</td>
+            <td>{{ o.data_festa.strftime('%d/%m/%Y') }}</td>
+            <td>R$ {{ "{:,.2f}".format(o.valor_total) }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="3">Nenhum agendamento encontrado.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</div>
+
+<style>
+.financeiro-container {
+    padding: 1rem 2rem;
+}
+
+.cards-financeiro {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.card-fin {
+    flex: 1;
+    min-width: 200px;
+    background: #fff;
+    padding: 1.2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
+.card-fin h3 {
+    color: #1976d2;
+    margin-bottom: 0.5rem;
+}
+
+.valor {
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+.valor.positivo { color: #2e7d32; }
+.valor.negativo { color: #c62828; }
+.valor.destaque { color: #1565c0; }
+
+.tabela-fin {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.tabela-fin th, .tabela-fin td {
+    padding: 0.8rem;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.tabela-fin th {
+    background: #1976d2;
+    color: white;
+    font-weight: 600;
+}
+
+.tabela-fin tr:hover {
+    background: #f1f1f1;
+}
+</style>

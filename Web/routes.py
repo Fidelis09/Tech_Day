@@ -145,6 +145,39 @@ def orcamentos():
     )
 
 
+
+# Exibe resumo de receitas, despesas e lucro total.
+# =============================================================
+# =============================================================
+# 💰 ROTA: /financeiro — Controle financeiro
+# =============================================================
+@app.route('/financeiro')
+def pagina_financeiro():
+    # Total de receitas (soma dos orçamentos)
+    receitas = db.session.query(db.func.sum(Orcamento.valor_total)).scalar() or 0.0
+    despesas = 0.0  # (pode ser expandido depois)
+    lucro = receitas - despesas
+
+    # Busca os últimos 5 agendamentos
+    ultimos_agendamentos = Orcamento.query.order_by(Orcamento.data_festa.desc()).limit(5).all()
+
+    # Renderiza o conteúdo da aba financeiro
+    page_content = render_template(
+        'financeiro.html',
+        receitas=receitas,
+        despesas=despesas,
+        lucro=lucro,
+        ultimos_agendamentos=ultimos_agendamentos  # <-- PASSA AQUI
+    )
+
+    return render_template(
+        'home.html',
+        active_page='financeiro',
+        page_title='Financeiro',
+        page_content=page_content
+    )
+
+
 # Listagem de Agendamentos
 @app.route('/agendamentos')
 def pagina_agendamentos():
