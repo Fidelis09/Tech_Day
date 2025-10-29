@@ -148,24 +148,28 @@ def orcamentos():
 # =============================================================
 # 💰 ROTA: /financeiro — Painel financeiro simplificado
 # =============================================================
+import datetime
+from flask import render_template, request
+from storage import Orcamento, db
+
 @app.route('/financeiro')
 def pagina_financeiro():
     hoje = datetime.date.today()
-    mes_atual = hoje.month
-    ano_atual = hoje.year
+    mes = request.args.get('mes', type=int, default=hoje.month)
+    ano = request.args.get('ano', type=int, default=hoje.year)
 
-    # ---------- RECEITAS E GASTOS DO MÊS ----------
+    # ---------- RECEITAS E GASTOS ----------
     receitas_mes = db.session.query(
         db.func.sum(Orcamento.valor_total)
     ).filter(
-        db.extract('month', Orcamento.data_festa) == mes_atual,
-        db.extract('year', Orcamento.data_festa) == ano_atual
+        db.extract('month', Orcamento.data_festa) == mes,
+        db.extract('year', Orcamento.data_festa) == ano
     ).scalar() or 0.0
 
     gasto_por_monitor = 150.0
     eventos_mes = Orcamento.query.filter(
-        db.extract('month', Orcamento.data_festa) == mes_atual,
-        db.extract('year', Orcamento.data_festa) == ano_atual
+        db.extract('month', Orcamento.data_festa) == mes,
+        db.extract('year', Orcamento.data_festa) == ano
     ).count()
     gastos_monitores = eventos_mes * gasto_por_monitor
 
@@ -178,17 +182,14 @@ def pagina_financeiro():
     for m in range(1, 13):
         total = db.session.query(db.func.sum(Orcamento.valor_total)).filter(
             db.extract('month', Orcamento.data_festa) == m,
-            db.extract('year', Orcamento.data_festa) == ano_atual
+            db.extract('year', Orcamento.data_festa) == ano
         ).scalar() or 0.0
-        meses.append(datetime.date(ano_atual, m, 1).strftime('%b'))
+        meses.append(datetime.date(ano, m, 1).strftime('%b'))
         lucros_mensais.append(float(total))
 
-    # ---------- PREVISÃO DE RECEITA FUTURA ----------
     receitas_futuras = db.session.query(
         db.func.sum(Orcamento.valor_total)
-    ).filter(
-        Orcamento.data_festa > hoje
-    ).scalar() or 0.0
+    ).filter(Orcamento.data_festa > hoje).scalar() or 0.0
 
     page_content = render_template(
         'financeiro.html',
@@ -197,7 +198,17 @@ def pagina_financeiro():
         gastos_monitores=gastos_monitores,
         receitas_futuras=receitas_futuras,
         meses=meses,
-        lucros_mensais=lucros_mensais
+        lucros_mensais=lucros_mensais,
+        mes=mes,
+        ano=ano,
+        datetime=datetime
+    )
+
+    return render_template(
+        'home.html',
+        active_page='financeiro',
+        page_title='Financeiro',
+        page_content=page_content
     )
 
     return render_template(
