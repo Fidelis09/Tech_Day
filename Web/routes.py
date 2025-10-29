@@ -275,12 +275,16 @@ def pagina_financeiro():
         meses.append(datetime.date(ano, m, 1).strftime('%b'))
         lucros_mensais.append(float(total))
 
-    # RECEITA FUTURA
+    # RECEITA FUTURA (somente do mês atual)
     receitas_futuras = db.session.query(
         db.func.sum(Orcamento.valor_total)
-    ).filter(Orcamento.data_festa > hoje).scalar() or 0.0
+    ).filter(
+        db.extract('month', Orcamento.data_festa) == mes,
+        db.extract('year', Orcamento.data_festa) == ano,
+        Orcamento.data_festa >= hoje
+    ).scalar() or 0.0
 
-    # Lista de despesas manuais para exibir
+    # Lista de despesas manuais
     despesas_mes = Despesa.query.filter(
         db.extract('month', Despesa.data) == mes,
         db.extract('year', Despesa.data) == ano
