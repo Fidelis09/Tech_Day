@@ -2,13 +2,16 @@
 /* Fonte */
 /* ========================================================================== */
 
+
 /* Importa a família de fontes Poppins (400 e 600) do Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
 
 
 /* ========================================================================== */
 /* Base / Globais */
 /* ========================================================================== */
+
 
 body {
     /* Zera margens padrão do navegador */
@@ -21,6 +24,7 @@ body {
     color: #333;
 }
 
+
 /* Contêiner raiz para layout em duas colunas (sidebar + conteúdo) */
 .container {
     /* Layout flex para posicionar sidebar e conteúdo */
@@ -30,9 +34,11 @@ body {
 }
 
 
+
 /* ========================================================================== */
 /* Sidebar (menu lateral) */
 /* ========================================================================== */
+
 
 .sidebar {
     /* Largura fixa da barra lateral */
@@ -58,6 +64,7 @@ body {
     box-sizing: border-box;
 }
 
+
 /* Área de logo no topo da sidebar */
 .sidebar .logo {
     /* Centraliza conteúdo do logo */
@@ -65,6 +72,7 @@ body {
     /* Espaço inferior do logo */
     padding-bottom: 1rem;
 }
+
 
 /* Imagem do logo com efeito ao passar o mouse */
 .sidebar .logo img {
@@ -80,10 +88,12 @@ body {
     cursor: pointer;
 }
 
+
 /* Efeito de destaque no logo ao hover */
 .sidebar .logo img:hover {
     transform: scale(1.1) rotate(5deg);
 }
+
 
 /* Título da marca na sidebar */
 .sidebar .logo h1 {
@@ -93,12 +103,14 @@ body {
     font-size: 1.25rem;
 }
 
+
 /* Navegação vertical na sidebar */
 .sidebar nav {
     display: flex;
     flex-direction: column;
     margin-top: 2rem;
 }
+
 
 /* Links da navegação */
 .sidebar a {
@@ -111,6 +123,7 @@ body {
     transition: background 0.3s;
 }
 
+
 /* Estado hover e item ativo com leve destaque */
 .sidebar a:hover,
 .sidebar a.active {
@@ -118,9 +131,11 @@ body {
 }
 
 
+
 /* ========================================================================== */
 /* Conteúdo principal */
 /* ========================================================================== */
+
 
 .content {
     /* Permite ocupar o espaço restante ao lado da sidebar */
@@ -142,10 +157,12 @@ body {
 }
 
 
+
 /* ========================================================================== */
 /* Home.html (estilo inline do .card do arquivo) */
 /* Observação: este bloco replica exatamente o estilo inline informado.       */
 /* ========================================================================== */
+
 
 .card {
     max-width: 500px;
@@ -162,13 +179,16 @@ body {
     box-shadow: 0 14px 40px rgba(0,0,0,0.18);
 }
 
+
 /* ========================================================================== */
-/* Financeiro                                                                 */
+/* Financeiro                                                                  */
 /* ========================================================================== */
+
 
 .financeiro-container {
   padding: 20px;
 }
+
 
 .filtro-financeiro {
   display: flex;
@@ -182,12 +202,14 @@ body {
   margin-bottom: 25px;
 }
 
+
 .filtro-financeiro label {
   display: flex;
   align-items: center;
   gap: 8px;
   margin: 0;
 }
+
 
 .filtro-financeiro select,
 .filtro-financeiro input,
@@ -198,9 +220,11 @@ body {
   margin: 0;
 }
 
+
 /* Financeiro – larguras proporcionais */
 #mes { min-width: 110px; }   /* antes 150px */
 #ano { width: 200px; }       /* antes 120px */
+
 
 
 .filtro-financeiro button {
@@ -210,9 +234,11 @@ body {
   transition: 0.2s;
 }
 
+
 .filtro-financeiro button:hover {
   background: #256f46;
 }
+
 
 .cards-financeiro {
   display: grid;
@@ -220,6 +246,7 @@ body {
   gap: 20px;
   margin-bottom: 40px;
 }
+
 
 .card-fin {
   background: #fff;
@@ -229,10 +256,12 @@ body {
   text-align: center;
 }
 
+
 .card-fin h3 {
   font-size: 1rem;
   color: #555;
 }
+
 
 .card-fin p {
   font-size: 1.4rem;
@@ -240,9 +269,11 @@ body {
   color: #2e8b57;
 }
 
+
 .card-fin small {
   color: #888;
 }
+
 
 .grafico-container {
   background: #fff;
@@ -252,11 +283,13 @@ body {
   margin-bottom: 30px;
 }
 
+
 /* Cores por tipo */
 .lucro-bruto p { color: #1a73e8; }
 .lucro-liquido p { color: #2e8b57; }
 .despesas p { color: #d9534f; }
 .receita-futura p { color: #f7b500; }
+
 
 /* Responsivo: permite quebrar em telas pequenas */
 @media (max-width: 520px) {
@@ -265,9 +298,11 @@ body {
 
 
 
+
 /* ========================================================================== */
 /* Admin (admin.html) */
 /* ========================================================================== */
+
 
 .admin-card {
     max-width: 500px;
@@ -280,10 +315,12 @@ body {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+
 .admin-card:hover {
     transform: translateY(-8px);
     box-shadow: 0 14px 40px rgba(0,0,0,0.18);
 }
+
 
 .tabs {
     display: flex;
@@ -291,6 +328,7 @@ body {
     background-color: #f3f4ff;
     user-select: none;
 }
+
 
 .tab-button {
     flex: 1;
@@ -307,15 +345,18 @@ body {
     text-transform: uppercase;
 }
 
+
 .tab-button:hover {
     color: #1E90FF; /* blue-600 */
 }
+
 
 .tab-button.active {
     color: #1E90FF; /* blue-700 */
     border-bottom: 3px solid #1E90FF;
     font-weight: 700;
 }
+
 
 .tab-content {
     padding: 25px 30px;
@@ -326,9 +367,11 @@ body {
     animation: fadeIn 0.35s ease forwards;
 }
 
+
 .tab-content.active {
     display: block;
 }
+
 
 form label {
     display: block;
@@ -337,6 +380,7 @@ form label {
     font-size: 14px;
     font-weight: 600;
 }
+
 
 form input[type="text"],
 form input[type="number"],
@@ -351,6 +395,7 @@ form select {
     box-sizing: border-box;
 }
 
+
 form input[type="text"]:focus,
 form input[type="number"]:focus,
 form input[type="file"]:focus,
@@ -359,6 +404,7 @@ form select:focus {
     box-shadow: 0 0 6px rgba(37, 99, 235, 0.5);
     outline: none;
 }
+
 
 .btn {
     display: inline-block;
@@ -377,15 +423,18 @@ form select:focus {
     box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
 }
 
+
 @keyframes fadeIn {
     from {opacity: 0; transform: translateY(12px);}
     to {opacity: 1; transform: translateY(0);}
 }
 
 
+
 /* ========================================================================== */
 /* Card genérico (catalogo, agendamentos, orcamento) */
 /* ========================================================================== */
+
 
 .card {
     /* Largura máxima do card */
@@ -403,11 +452,13 @@ form select:focus {
     transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
+
 /* Elevação sutil no hover do card */
 .card:hover {
     box-shadow: 0 14px 30px rgba(30, 144, 255, 0.3);
     transform: translateY(-6px);
 }
+
 
 /* Título dentro do card */
 .card h3 {
@@ -419,9 +470,11 @@ form select:focus {
 }
 
 
+
 /* ========================================================================== */
 /* Agendamentos (agendamentos.html) */
 /* ========================================================================== */
+
 
 .agendamento {
     /* Fundo claro com borda azul clara */
@@ -437,10 +490,12 @@ form select:focus {
     transition: background 0.3s ease;
 }
 
+
 /* Realce ao passar o mouse */
 .agendamento:hover {
     background: #e3f0ff;
 }
+
 
 /* Parágrafos internos de agendamento */
 .agendamento p {
@@ -448,6 +503,7 @@ form select:focus {
     color: #333;
     font-size: 1rem;
 }
+
 
 /* Tag/Chip de brinquedo */
 .tag {
@@ -469,11 +525,13 @@ form select:focus {
     transition: background-color 0.3s ease;
 }
 
+
 /* Escurece levemente no hover (sem virar botão clicável) */
 .tag:hover {
     background-color: #115293;
     cursor: default;
 }
+
 
 /* Valor/destaque em vermelho (ex.: preço) */
 .valor {
@@ -481,6 +539,7 @@ form select:focus {
     color: #d32f2f;
     font-size: 1.1rem;
 }
+
 
 /* Mensagem para estados sem dados */
 .no-data {
@@ -492,9 +551,11 @@ form select:focus {
 }
 
 
+
 /* ========================================================================== */
 /* Catálogo (catalogo.html) */
 /* ========================================================================== */
+
 
 .catalogo-cards {
     /* Altura limitada para caber na viewport com rolagem */
@@ -508,6 +569,7 @@ form select:focus {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     margin-bottom: 1rem;
 }
+
 
 /* Card individual de brinquedo */
 .card-brinquedo {
@@ -525,11 +587,13 @@ form select:focus {
     cursor: pointer;
 }
 
+
 /* Realce no hover do card de brinquedo */
 .card-brinquedo:hover {
     box-shadow: 0 10px 20px rgba(30, 144, 255, 0.35);
     transform: translateY(-5px);
 }
+
 
 /* Moldura da imagem do card */
 .imagem-wrapper {
@@ -538,6 +602,7 @@ form select:focus {
     /* Barra decorativa inferior azul */
     border-bottom: 3px solid #1E90FF;
 }
+
 
 /* Imagem responsiva cobrindo o wrapper */
 .imagem-wrapper img {
@@ -549,10 +614,12 @@ form select:focus {
     transition: transform 0.4s ease;
 }
 
+
 /* Leve zoom na imagem ao passar o mouse no card */
 .card-brinquedo:hover .imagem-wrapper img {
     transform: scale(1.05);
 }
+
 
 /* Área de informações do brinquedo */
 .info-brinquedo {
@@ -564,6 +631,7 @@ form select:focus {
     justify-content: space-between;
 }
 
+
 /* Título do brinquedo */
 .info-brinquedo h3 {
     margin: 0 0 0.6rem 0;
@@ -572,12 +640,14 @@ form select:focus {
     font-size: 1.3rem;
 }
 
+
 /* Textos informativos do brinquedo */
 .info-brinquedo p {
     margin: 0.3rem 0;
     font-size: 0.95rem;
     color: #333;
 }
+
 
 /* Preço em destaque */
 .preco {
@@ -588,9 +658,11 @@ form select:focus {
 }
 
 
+
 /* ========================================================================== */
 /* Controles / Inputs gerais */
 /* ========================================================================== */
+
 
 /* Label com alinhamento para checkbox ao lado */
 label {
@@ -601,6 +673,7 @@ label {
     cursor: pointer;
 }
 
+
 /* Tamanho e espaçamento do checkbox genérico */
 label input[type="checkbox"] {
     margin-right: 8px;
@@ -609,6 +682,7 @@ label input[type="checkbox"] {
     cursor: pointer;
 }
 
+
 /* Botão de excluir dentro de formulários alinhado à esquerda */
 form > .btn {
     align-self: flex-start;
@@ -616,9 +690,11 @@ form > .btn {
 }
 
 
+
 /* ========================================================================== */
 /* Formulário de Orçamento (orcamento.html) */
 /* ========================================================================== */
+
 
 .form-container {
     /* Envolve o formulário e o alinha à direita */
@@ -631,6 +707,7 @@ form > .btn {
     padding: 2rem;
     box-sizing: border-box;
 }
+
 
 /* Bloco do formulário principal */
 .form {
@@ -648,6 +725,7 @@ form > .btn {
     margin: 0 auto;
 }
 
+
 /* Labels do formulário em coluna (rótulo acima do input) */
 .form label {
     margin-bottom: 1rem;
@@ -656,6 +734,7 @@ form > .btn {
     display: flex;
     flex-direction: column;
 }
+
 
 /* Campos de texto, data, hora e selects */
 .form input[type="text"],
@@ -671,6 +750,7 @@ form > .btn {
     box-sizing: border-box;
 }
 
+
 /* Grupo de checkboxes responsivo (multi-linha) */
 .checkbox-group {
     display: flex;
@@ -678,6 +758,7 @@ form > .btn {
     gap: 0.75rem;
     margin-top: 0.5rem;
 }
+
 
 /* Item individual de checkbox estilizado como chip */
 .checkbox-item {
@@ -694,6 +775,7 @@ form > .btn {
     box-sizing: border-box;
 }
 
+
 /* Tamanho do input checkbox dentro do chip */
 .checkbox-item input[type="checkbox"] {
     margin-right: 0.5rem;
@@ -703,9 +785,11 @@ form > .btn {
 }
 
 
+
 /* ========================================================================== */
 /* Botões (genérico) */
 /* ========================================================================== */
+
 
 .btn {
     margin-top: 1.5rem;
@@ -721,15 +805,18 @@ form > .btn {
     display: inline-block;
 }
 
+
 /* Hover do botão principal */
 .btn:hover {
     background-color: #0f5ec3;
 }
 
 
+
 /* ========================================================================== */
 /* Responsividade */
 /* ========================================================================== */
+
 
 @media (max-width: 768px) {
     /* Sidebar vira barra superior responsiva */
@@ -743,6 +830,7 @@ form > .btn {
         padding: 1rem;
     }
 
+
     /* Conteúdo ocupa 100% e ajusta a altura */
     .content {
         margin-left: 0;
@@ -750,16 +838,19 @@ form > .btn {
         height: calc(100vh - 80px);
     }
 
+
     /* Card com padding menor e rolagem horizontal opcional */
     .card {
         padding: 1rem;
         overflow-x: scroll;
     }
 
+
     /* Tabela responsiva: esconde o cabeçalho */
     .table thead {
         display: none;
     }
+
 
     /* Células viram blocos com rótulos simulando cabeçalhos */
     .table tbody td {
@@ -771,6 +862,7 @@ form > .btn {
         border-top: 1px solid #ddd;
         margin-bottom: 0.75rem;
     }
+
 
     /* Rótulos gerados via data-label para cada célula */
     .table tbody td::before {
@@ -785,6 +877,7 @@ form > .btn {
         white-space: nowrap;
     }
 
+
     /* Linhas da tabela viram cartões separados */
     .table tbody tr {
         display: block;
@@ -792,11 +885,13 @@ form > .btn {
         border-radius: 8px;
     }
 
+
     /* Form ocupa largura total com padding reduzido */
     .form {
         max-width: 100%;
         padding: 1.5rem;
     }
+
 
     /* Checkboxes ocupam toda a largura (uma coluna) */
     .checkbox-item {
@@ -805,17 +900,145 @@ form > .btn {
 }
 
 
+
 /* ========================================================================== */
 /* Scrollbar (WebKit) */
 /* ========================================================================== */
+
 
 /* Largura do trilho da barra de rolagem */
 ::-webkit-scrollbar {
     width: 8px;
 }
 
+
 /* Polegar (thumb) da scrollbar com cor e raio */
 ::-webkit-scrollbar-thumb {
     background-color: rgba(0, 0, 0, 0.2);
     border-radius: 4px;
+}
+
+
+
+/* ========================================================================== */
+/* Dashboard (home - métricas e rankings) */
+/* Escopo apenas dentro do card do dashboard para não impactar outras páginas */
+/* ========================================================================== */
+
+
+/* Grid das métricas no dashboard */
+.card .dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 12px;
+  align-items: stretch; /* uniformiza alturas */
+}
+
+
+/* Cartão de métrica */
+.card .metric {
+  background: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
+  border: 1px solid #e1ecff;
+  border-radius: 12px;
+  padding: 14px 16px;
+  box-shadow: 0 2px 8px rgba(30, 144, 255, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Realce sutil */
+.card .metric:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(30, 144, 255, 0.15);
+}
+
+/* Título da métrica */
+.card .metric h4 {
+  margin: 0 0 8px 0;
+  color: #1976d2;
+  font-size: 0.95rem;
+  letter-spacing: 0.2px;
+}
+
+/* Valor principal da métrica */
+.card .metric .metric-value {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #0f5ec3;
+  line-height: 1.1;
+}
+
+
+/* Lista de rankings (monitores, clientes, brinquedos) */
+.card .list-ranking {
+  list-style: none;
+  margin: 8px 0 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column; /* um por linha */
+  gap: 8px;
+}
+
+/* Item de ranking */
+.card .list-ranking li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  background: #f9fbff;
+  border: 1px solid #dbe9ff;
+  border-radius: 10px;
+  min-height: 44px;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Conteúdo do lado esquerdo (nome) */
+.card .list-ranking li span {
+  color: #374151;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Destaque do lado direito (qtd/valor) */
+.card .list-ranking li strong {
+  color: #1E90FF;
+  font-weight: 800;
+}
+
+/* Hover do item de ranking */
+.card .list-ranking li:hover {
+  background: #eef6ff;
+  border-color: #c8deff;
+}
+
+/* Espaço entre qtd e valor (quando vierem juntos com separador “•”) */
+.card .list-ranking li strong + strong {
+  margin-left: 10px;
+}
+
+/* Responsividade específica do dashboard */
+@media (max-width: 520px) {
+  .card .dashboard-grid {
+    grid-template-columns: 1fr; /* uma coluna em telas pequenas */
+  }
+
+  .card .metric {
+    padding: 12px;
+  }
+
+  .card .metric .metric-value {
+    font-size: 1.7rem;
+  }
+}
+
+/* Acessibilidade: reduzir movimentos quando solicitado */
+@media (prefers-reduced-motion: reduce) {
+  .card .metric,
+  .card .list-ranking li {
+    transition: none;
+  }
 }
