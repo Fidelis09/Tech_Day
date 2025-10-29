@@ -245,7 +245,7 @@ def pagina_financeiro():
     ).scalar() or 0.0
 
     # GASTOS FIXOS COM MONITORES
-    gasto_por_monitor = 150.0
+    gasto_por_monitor = 80.0
     eventos_mes = Orcamento.query.filter(
         db.extract('month', Orcamento.data_festa) == mes,
         db.extract('year', Orcamento.data_festa) == ano
@@ -308,7 +308,7 @@ def pagina_financeiro():
     return render_template(
         'home.html',
         active_page='financeiro',
-        page_title='Financeiro',
+        page_title='💰 Financeiro',
         page_content=page_content
     )
 
