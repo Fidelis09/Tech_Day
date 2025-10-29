@@ -1,11 +1,11 @@
 <div class="financeiro-container">
   <h2>💰 Painel Financeiro</h2>
 
-  <!-- ======== FILTRO DE MÊS/ANO ======== -->
+  <!-- FILTRO DE MÊS -->
   <form method="get" action="/financeiro" class="filtro-financeiro">
     <label for="mes">Mês:</label>
+    {% set meses_nome = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'] %}
     <select name="mes" id="mes">
-      {% set meses_nome = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'] %}
       {% for i in range(1, 13) %}
         <option value="{{ i }}" {% if i == mes %}selected{% endif %}>{{ meses_nome[i-1] }}</option>
       {% endfor %}
@@ -13,11 +13,10 @@
 
     <label for="ano">Ano:</label>
     <input type="number" name="ano" id="ano" value="{{ ano }}">
-
     <button type="submit">🔍 Filtrar</button>
   </form>
 
-  <!-- ======== BLOCOS DE RESUMO ======== -->
+  <!-- BLOCOS DE RESUMO -->
   <div class="cards-financeiro">
     <div class="card-fin lucro-bruto">
       <h3>Lucro Bruto</h3>
@@ -28,54 +27,97 @@
     <div class="card-fin lucro-liquido">
       <h3>Lucro Líquido</h3>
       <p>R$ {{ "{:,.2f}".format(lucro_liquido) }}</p>
-      <small>Lucro após custos com monitores</small>
+      <small>Lucro após custos e despesas</small>
     </div>
 
     <div class="card-fin despesas">
       <h3>Gastos com Monitores</h3>
       <p>R$ {{ "{:,.2f}".format(gastos_monitores) }}</p>
-      <small>Total pago a monitores neste mês</small>
+      <small>Custos fixos de operação</small>
+    </div>
+
+    <div class="card-fin outras-despesas">
+      <h3>Outras Despesas</h3>
+      <p>R$ {{ "{:,.2f}".format(outras_despesas) }}</p>
+      <small>Despesas adicionais manuais</small>
     </div>
 
     <div class="card-fin receita-futura">
       <h3>Previsão de Receita Futura</h3>
       <p>R$ {{ "{:,.2f}".format(receitas_futuras) }}</p>
-      <small>Baseada em festas já agendadas</small>
+      <small>Festas agendadas futuras</small>
     </div>
   </div>
 
-  <!-- ======== GRÁFICO DE LUCROS MENSAIS ======== -->
+  <!-- GRÁFICO DE LUCROS -->
   <div class="grafico-container">
     <h3>📈 Lucros Mensais - {{ ano }}</h3>
     <canvas id="graficoLucro"></canvas>
   </div>
+
+  <!-- LISTA DE DESPESAS -->
+  <div class="tabela-despesas">
+    <h3>📋 Despesas do Mês</h3>
+    {% if despesas_mes %}
+    <table>
+      <thead>
+        <tr><th>Data</th><th>Descrição</th><th>Valor (R$)</th></tr>
+      </thead>
+      <tbody>
+        {% for d in despesas_mes %}
+        <tr>
+          <td>{{ d.data.strftime('%d/%m/%Y') }}</td>
+          <td>{{ d.descricao }}</td>
+          <td>{{ "%.2f"|format(d.valor) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+      <p class="no-data">Nenhuma despesa registrada neste mês.</p>
+    {% endif %}
+  </div>
 </div>
 
-<!-- ======== CHART.JS ======== -->
+<!-- BOTÃO FLUTUANTE -->
+<button id="btnAddDespesa" class="btn-flutuante">＋</button>
+
+<!-- MODAL -->
+<div id="modalDespesa" class="modal">
+  <div class="modal-content">
+    <span id="fecharModal" class="close">&times;</span>
+    <h3>Adicionar Despesa</h3>
+    <form action="/adicionar_despesa" method="POST">
+      <label>Descrição:</label>
+      <input type="text" name="descricao" required>
+
+      <label>Valor:</label>
+      <input type="number" step="0.01" name="valor" required>
+
+      <label>Data:</label>
+      <input type="date" name="data" value="{{ datetime.date.today() }}" required>
+
+      <button type="submit" class="btn">Salvar</button>
+    </form>
+  </div>
+</div>
+
+<!-- CHART.JS -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 const meses = JSON.parse('{{ meses | tojson | safe }}');
 const lucros = JSON.parse('{{ lucros_mensais | tojson | safe }}');
-
 new Chart(document.getElementById('graficoLucro'), {
   type: 'line',
-  data: {
-    labels: meses,
-    datasets: [{
-      label: 'Lucro Mensal (R$)',
-      data: lucros,
-      borderColor: '#2e8b57',
-      backgroundColor: 'rgba(46,139,87,0.2)',
-      fill: true,
-      tension: 0.3
-    }]
-  },
-  options: {
-    responsive: true,
-    plugins: {
-      legend: { position: 'bottom' },
-      tooltip: { mode: 'index', intersect: false }
-    }
-  }
+  data: { labels: meses, datasets: [{ label: 'Lucro Mensal (R$)', data: lucros, borderColor: '#2e8b57', backgroundColor: 'rgba(46,139,87,0.2)', fill: true, tension: 0.3 }] },
+  options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
 });
+
+// Modal JS
+const modal = document.getElementById('modalDespesa');
+const btn = document.getElementById('btnAddDespesa');
+const span = document.getElementById('fecharModal');
+btn.onclick = () => modal.style.display = "block";
+span.onclick = () => modal.style.display = "none";
+window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; };
 </script>

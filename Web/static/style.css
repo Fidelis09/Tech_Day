@@ -1042,3 +1042,55 @@ form > .btn {
     transition: none;
   }
 }
+
+
+/* ========================================================================== */
+/* botao de finanças*/
+
+/* Botão flutuante */
+.btn-flutuante {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: #2e8b57;
+  color: white;
+  font-size: 1.8rem;
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  cursor: pointer;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+  transition: background 0.3s, transform 0.2s;
+  z-index: 1000;
+}
+.btn-flutuante:hover {
+  background: #256f46;
+  transform: scale(1.1);
+}
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.4);
+}
+.modal-content {
+  background: #fff;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+.close {
+  float: right;
+  font-size: 1.4rem;
+  cursor: pointer;
+  color: #666;
+}
+.close:hover { color: #000; }

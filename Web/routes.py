@@ -223,7 +223,12 @@ def orcamentos():
 # 💰 ROTA: /financeiro — Painel financeiro simplificado
 import datetime
 from flask import render_template, request
-from storage import Orcamento, db
+from storage import Orcamento, db, Despesa
+
+# 💰 ROTA: /financeiro — Painel financeiro completo
+import datetime
+from flask import render_template, request, redirect, flash
+from storage import Orcamento, db, Despesa
 
 @app.route('/financeiro')
 def pagina_financeiro():
@@ -231,7 +236,7 @@ def pagina_financeiro():
     mes = request.args.get('mes', type=int, default=hoje.month)
     ano = request.args.get('ano', type=int, default=hoje.year)
 
-    # RECEITAS E GASTOS
+    # RECEITAS DO MÊS
     receitas_mes = db.session.query(
         db.func.sum(Orcamento.valor_total)
     ).filter(
@@ -239,6 +244,7 @@ def pagina_financeiro():
         db.extract('year', Orcamento.data_festa) == ano
     ).scalar() or 0.0
 
+    # GASTOS FIXOS COM MONITORES
     gasto_por_monitor = 150.0
     eventos_mes = Orcamento.query.filter(
         db.extract('month', Orcamento.data_festa) == mes,
@@ -246,10 +252,19 @@ def pagina_financeiro():
     ).count()
     gastos_monitores = eventos_mes * gasto_por_monitor
 
-    lucro_bruto = receitas_mes
-    lucro_liquido = receitas_mes - gastos_monitores
+    # OUTRAS DESPESAS
+    outras_despesas = db.session.query(
+        db.func.sum(Despesa.valor)
+    ).filter(
+        db.extract('month', Despesa.data) == mes,
+        db.extract('year', Despesa.data) == ano
+    ).scalar() or 0.0
 
-    # ESTATÍSTICAS MENSAIS
+    # LUCROS
+    lucro_bruto = receitas_mes
+    lucro_liquido = receitas_mes - (gastos_monitores + outras_despesas)
+
+    # ESTATÍSTICAS ANUAIS
     meses = []
     lucros_mensais = []
     for m in range(1, 13):
@@ -260,18 +275,27 @@ def pagina_financeiro():
         meses.append(datetime.date(ano, m, 1).strftime('%b'))
         lucros_mensais.append(float(total))
 
+    # RECEITA FUTURA
     receitas_futuras = db.session.query(
         db.func.sum(Orcamento.valor_total)
     ).filter(Orcamento.data_festa > hoje).scalar() or 0.0
+
+    # Lista de despesas manuais para exibir
+    despesas_mes = Despesa.query.filter(
+        db.extract('month', Despesa.data) == mes,
+        db.extract('year', Despesa.data) == ano
+    ).order_by(Despesa.data.desc()).all()
 
     page_content = render_template(
         'financeiro.html',
         lucro_bruto=lucro_bruto,
         lucro_liquido=lucro_liquido,
         gastos_monitores=gastos_monitores,
+        outras_despesas=outras_despesas,
         receitas_futuras=receitas_futuras,
         meses=meses,
         lucros_mensais=lucros_mensais,
+        despesas_mes=despesas_mes,
         mes=mes,
         ano=ano,
         datetime=datetime
@@ -283,6 +307,20 @@ def pagina_financeiro():
         page_title='Financeiro',
         page_content=page_content
     )
+
+
+# ➕ Adicionar despesa manual
+@app.route('/adicionar_despesa', methods=['POST'])
+def adicionar_despesa():
+    descricao = request.form.get('descricao')
+    valor = float(request.form.get('valor') or 0)
+    data = datetime.datetime.strptime(request.form.get('data'), '%Y-%m-%d').date()
+
+    nova = Despesa(descricao=descricao, valor=valor, data=data)
+    db.session.add(nova)
+    db.session.commit()
+    flash(f"Despesa '{descricao}' adicionada com sucesso!", "success")
+    return redirect('/financeiro')
 
 # Listagem de Agendamentos
 @app.route('/agendamentos')

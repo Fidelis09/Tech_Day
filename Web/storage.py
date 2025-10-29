@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
+from datetime import date
+
 
 db = SQLAlchemy()
 
@@ -34,3 +35,11 @@ orcamento_brinquedo = db.Table('orcamento_brinquedo',
     db.Column('orcamento_id', db.Integer, db.ForeignKey('orcamento.id')),
     db.Column('brinquedo_id', db.Integer, db.ForeignKey('brinquedo.id'))
 )
+
+class Despesa(db.Model):
+    __tablename__ = 'despesas'
+    id = db.Column(db.Integer, primary_key=True)
+    descricao = db.Column(db.String(100), nullable=False)
+    valor = db.Column(db.Float, nullable=False)
+    data = db.Column(db.Date, default=date.today)
+
