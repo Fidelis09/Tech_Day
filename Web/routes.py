@@ -255,13 +255,15 @@ def pagina_financeiro():
     ).count()
     gastos_monitores = eventos_mes * gasto_por_monitor
 
-    # OUTRAS DESPESAS
+    # OUTRAS DESPESAS (apenas positivas)
     outras_despesas = db.session.query(
         db.func.sum(Despesa.valor)
     ).filter(
         db.extract('month', Despesa.data) == mes,
-        db.extract('year', Despesa.data) == ano
+        db.extract('year', Despesa.data) == ano,
+        Despesa.valor > 0  # ✅ evita receitas entrarem aqui
     ).scalar() or 0.0
+
 
     # LUCROS
     lucro_bruto = receitas_mes
@@ -339,30 +341,38 @@ def api_agendamentos():
         monitor_nome = o.monitor.nome if hasattr(o, 'monitor') and o.monitor else 'Sem monitor'
         eventos.append({
             "id": o.id,
-            "title": o.nome_cliente,  # 👈 só o nome do cliente no calendário
-            "start": f"{o.data_festa.isoformat()}T{hora_str}",  # data + hora
+            "title": o.nome_cliente,
+            "start": f"{o.data_festa.isoformat()}T{hora_str}",
             "extendedProps": {
                 "telefone": o.telefone,
                 "endereco": o.endereco,
                 "valor_total": float(o.valor_total or 0),
                 "hora_festa": hora_str,
                 "brinquedos": [b.nome for b in o.brinquedos],
-                "monitor": monitor_nome  # 👈 novo campo
+                "monitor": monitor_nome
             },
-            "color": "#ffb84d"
+            "color": "#28a745" if o.status == "finalizado" else "#ffb84d"
         })
     return jsonify(eventos)
+
 
 # 🟩 Finalizar evento — adiciona receita ao financeiro
 @app.route('/finalizar_evento/<int:id>', methods=['POST'])
 def finalizar_evento(id):
     evento = Orcamento.query.get_or_404(id)
 
-    # cria uma despesa negativa? Não, adiciona receita manual (ou apenas marca como finalizado)
+    # ⚠️ Impede finalização duplicada
+    if evento.status == 'finalizado':
+        return jsonify({"mensagem": f"O evento '{evento.nome_cliente}' já foi finalizado anteriormente."})
+
+    # Marca o evento como finalizado
+    evento.status = 'finalizado'
+
+    # Adiciona registro no financeiro (receita)
     descricao = f"Receita: {evento.nome_cliente} ({evento.data_festa.strftime('%d/%m/%Y')})"
     nova_receita = Despesa(
         descricao=descricao,
-        valor=-float(evento.valor_total),  # negativo pois Despesa representa saídas
+        valor=-float(evento.valor_total),  # negativo = entrada
         data=evento.data_festa
     )
 

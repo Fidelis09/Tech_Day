@@ -30,6 +30,8 @@ class Orcamento(db.Model):
     hora_festa = db.Column(db.Time, nullable=True)
     monitor_id = db.Column(db.Integer, db.ForeignKey('monitor.id'), nullable=True)
     monitor = db.relationship('Monitor', backref='orcamentos')
+    status = db.Column(db.String(20), default='pendente')  # pendente | finalizado | cancelado
+
 
 orcamento_brinquedo = db.Table('orcamento_brinquedo',
     db.Column('orcamento_id', db.Integer, db.ForeignKey('orcamento.id')),
