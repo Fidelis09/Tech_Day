@@ -25,6 +25,12 @@
       <p><strong>Monitor:</strong> <span id="modalMonitor"></span></p>
       <p><strong>Brinquedos:</strong> <span id="modalBrinquedos"></span></p>
       <p><strong>Valor Total:</strong> R$ <span id="modalValor"></span></p>
+
+      <!-- BOTÕES DE AÇÃO -->
+      <div class="acoes-modal">
+        <button id="btnFinalizar" class="btn btn-finalizar">✅ Finalizar</button>
+        <button id="btnExcluir" class="btn btn-excluir">🗑️ Excluir</button>
+      </div>
     </div>
   </div>
 </div>
@@ -42,39 +48,36 @@
   padding: 0;
   display: flex;
   background: #fff;
-  gap: 0; /* sem espaçamento entre colunas */
+  gap: 0;
 }
 
-/* COLUNA ESQUERDA (CALENDÁRIO) */
+/* CALENDÁRIO */
 .calendario-container {
-  flex: 3; /* ⬆️ deixa o calendário ocupar mais espaço */
+  flex: 3;
   padding: 25px;
   box-sizing: border-box;
   background: #fff;
 }
-
 #calendar {
   height: 100%;
   width: 100%;
   border-radius: 10px;
 }
 
-/* COLUNA DIREITA (EVENTOS DO DIA) */
+/* LISTA DE EVENTOS DO DIA */
 .lista-eventos {
-  flex: 1.2; /* ⬇️ reduz a largura dos eventos */
+  flex: 1.2;
   background: #f8faff;
   border-left: 2px solid #dbe9ff;
   padding: 18px;
   box-sizing: border-box;
   overflow-y: auto;
 }
-
 .lista-eventos h3 {
   color: #1E90FF;
   margin-bottom: 15px;
   font-size: 1.1rem;
 }
-
 .evento-item {
   background: #fff;
   border: 1px solid #cfe0ff;
@@ -85,18 +88,16 @@
   transition: 0.2s;
   font-size: 0.9rem;
 }
-
 .evento-item:hover {
   background: #eef5ff;
 }
-
 .no-data {
   color: #999;
   font-style: italic;
   font-size: 0.9rem;
 }
 
-/* MODAL DETALHES */
+/* MODAL */
 .modal {
   display: none;
   position: fixed;
@@ -127,7 +128,36 @@
   cursor: pointer;
 }
 
-/* 📱 Ajuste Responsivo */
+/* BOTÕES DO MODAL */
+.acoes-modal {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+.btn {
+  display: inline-block;
+  color: white;
+  padding: 10px 18px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.btn-finalizar {
+  background: #28a745;
+}
+.btn-finalizar:hover {
+  background: #1e7e34;
+}
+.btn-excluir {
+  background: #dc3545;
+}
+.btn-excluir:hover {
+  background: #a71d2a;
+}
+
+/* RESPONSIVO */
 @media (max-width: 1024px) {
   .agendamentos-fullscreen {
     flex-direction: column;
@@ -148,6 +178,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const calendarEl = document.getElementById('calendar');
+  const eventosDiaContainer = document.getElementById('eventosDia');
 
   const calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: 'dayGridMonth',
@@ -168,21 +199,14 @@ document.addEventListener('DOMContentLoaded', function() {
     },
 
     dateClick: function(info) {
-      const dataSelecionada = info.dateStr;
-      fetch('/api/agendamentos')
-        .then(res => res.json())
-        .then(eventos => {
-          const eventosDia = eventos.filter(e => e.start.startsWith(dataSelecionada));
-          const container = document.getElementById('eventosDia');
-          container.innerHTML = eventosDia.length
-            ? eventosDia.map(ev => `
-                <div class="evento-item" onclick="abrirModal('${ev.id}')">
-                  <strong>${ev.title}</strong><br>
-                  ${ev.extendedProps.hora_festa || '-'} — R$ ${ev.extendedProps.valor_total.toFixed(2)}
-                </div>
-              `).join('')
-            : '<p class="no-data">Nenhum evento neste dia.</p>';
-        });
+      carregarEventosDoDia(info.dateStr);
+    },
+
+    // ⏰ Ao carregar o calendário pela primeira vez
+    datesSet: function() {
+      const hoje = new Date();
+      const dataHoje = hoje.toISOString().split('T')[0];
+      carregarEventosDoDia(dataHoje);
     }
   });
 
@@ -196,21 +220,45 @@ document.addEventListener('DOMContentLoaded', function() {
     const modal = document.getElementById('modalEvento');
     if (e.target === modal) modal.setAttribute('aria-hidden', 'true');
   });
+
+  // 🔹 Função para carregar eventos do dia selecionado
+  function carregarEventosDoDia(dataSelecionada) {
+    fetch('/api/agendamentos')
+      .then(res => res.json())
+      .then(eventos => {
+        const eventosDia = eventos.filter(e => e.start.startsWith(dataSelecionada));
+        eventosDiaContainer.innerHTML = eventosDia.length
+          ? eventosDia.map(ev => `
+              <div class="evento-item" onclick="abrirModal('${ev.id}')">
+                <strong>${ev.title}</strong><br>
+                ${ev.extendedProps.hora_festa || '-'} — R$ ${ev.extendedProps.valor_total.toFixed(2)}
+              </div>
+            `).join('')
+          : '<p class="no-data">Nenhum evento neste dia.</p>';
+      });
+  }
+
+  // 🔹 Já seleciona o dia atual e mostra os eventos assim que a página abre
+  const hoje = new Date();
+  const dataHoje = hoje.toISOString().split('T')[0];
+  carregarEventosDoDia(dataHoje);
 });
 
-// FUNÇÃO PARA ABRIR MODAL PELO ID
+let eventoAtual = null;
+
 function abrirModal(id) {
   fetch('/api/agendamentos')
     .then(res => res.json())
     .then(eventos => {
       const ev = eventos.find(e => e.id == id);
       if (!ev) return;
-      const [ano, mes, diaHora] = ev.start.split('T');
-      const dataFormatada = ano && mes ? ev.start.split('T')[0].split('-').reverse().join('/') : '-';
+      eventoAtual = ev;
+
+      const dataFormatada = ev.start.split('T')[0].split('-').reverse().join('/');
       document.getElementById('modalTitulo').innerText = ev.title;
       document.getElementById('modalData').innerText = dataFormatada;
       document.getElementById('modalHora').innerText = ev.extendedProps.hora_festa || '-';
-      document.getElementById('modalCliente').innerText = ev.title.split('—')[0].trim();
+      document.getElementById('modalCliente').innerText = ev.title;
       document.getElementById('modalTelefone').innerText = ev.extendedProps.telefone || '-';
       document.getElementById('modalEndereco').innerText = ev.extendedProps.endereco || '-';
       document.getElementById('modalMonitor').innerText = ev.extendedProps.monitor || '-';
@@ -219,4 +267,31 @@ function abrirModal(id) {
       document.getElementById('modalEvento').setAttribute('aria-hidden', 'false');
     });
 }
+
+// ✅ Finalizar evento
+document.getElementById('btnFinalizar').addEventListener('click', () => {
+  if (!eventoAtual) return;
+  if (confirm("Deseja finalizar este evento e adicioná-lo ao financeiro?")) {
+    fetch(`/finalizar_evento/${eventoAtual.id}`, { method: 'POST' })
+      .then(res => res.json())
+      .then(data => {
+        alert(data.mensagem);
+        window.location.reload();
+      });
+  }
+});
+
+// 🗑️ Excluir evento
+document.getElementById('btnExcluir').addEventListener('click', () => {
+  if (!eventoAtual) return;
+  if (confirm("Tem certeza que deseja excluir este agendamento?")) {
+    fetch(`/excluir_evento/${eventoAtual.id}`, { method: 'DELETE' })
+      .then(res => res.json())
+      .then(data => {
+        alert(data.mensagem);
+        window.location.reload();
+      });
+  }
+});
 </script>
+

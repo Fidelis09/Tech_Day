@@ -353,6 +353,33 @@ def api_agendamentos():
         })
     return jsonify(eventos)
 
+# 🟩 Finalizar evento — adiciona receita ao financeiro
+@app.route('/finalizar_evento/<int:id>', methods=['POST'])
+def finalizar_evento(id):
+    evento = Orcamento.query.get_or_404(id)
+
+    # cria uma despesa negativa? Não, adiciona receita manual (ou apenas marca como finalizado)
+    descricao = f"Receita: {evento.nome_cliente} ({evento.data_festa.strftime('%d/%m/%Y')})"
+    nova_receita = Despesa(
+        descricao=descricao,
+        valor=-float(evento.valor_total),  # negativo pois Despesa representa saídas
+        data=evento.data_festa
+    )
+
+    db.session.add(nova_receita)
+    db.session.commit()
+
+    return jsonify({"mensagem": f"Evento de {evento.nome_cliente} finalizado e registrado no financeiro!"})
+
+
+# 🟥 Excluir evento
+@app.route('/excluir_evento/<int:id>', methods=['DELETE'])
+def excluir_evento(id):
+    evento = Orcamento.query.get_or_404(id)
+    db.session.delete(evento)
+    db.session.commit()
+    return jsonify({"mensagem": f"Agendamento de {evento.nome_cliente} foi excluído com sucesso."})
+
 
 
 # Substitua a rota pagina_agendamentos atual por esta (ou edite para renderizar o novo template)
