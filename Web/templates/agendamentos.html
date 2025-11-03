@@ -1,28 +1,222 @@
-<div class="card">
-    <h3>Festas Agendadas</h3>
-    {% for orcamento in agendados %}
-    <div class="agendamento">
-        <p><strong>Cliente:</strong> {{ orcamento.nome_cliente }}</p>
-        <p><strong>Telefone:</strong> {{ orcamento.telefone }}</p>
-        <p><strong>Endereço:</strong> {{ orcamento.endereco }}</p>
-        <p><strong>Brinquedos:</strong>
-            {% for b in orcamento.brinquedos %}
-            <span class="tag">{{ b.nome }}</span>
-            {% endfor %}
-        </p>
-        <p><strong>Valor Total:</strong> <span class="valor">R$ {{ "%.2f"|format(orcamento.valor_total) }}</span></p>
-        <p><strong>Data:</strong> {{ orcamento.data_festa.strftime('%d/%m/%Y') }} - 
-           <strong>Hora:</strong> {{ orcamento.hora_festa.strftime('%H:%M') }}</p>
-    </div>
-    <p><strong>Monitor:</strong> 
-  {% if orcamento.monitor %}
-    {{ orcamento.monitor.nome }} ({{ orcamento.monitor.telefone }})
-  {% else %}
-    <em>Sem monitor atribuído</em>
-  {% endif %}
-</p>
+<!-- templates/agendamentos.html -->
+<div class="agendamentos-fullscreen">
+  <!-- CALENDÁRIO -->
+  <div class="calendario-container">
+    <div id="calendar"></div>
+  </div>
 
-    {% else %}
-    <p class="no-data">Nenhum agendamento feito.</p>
-    {% endfor %}
+  <!-- LISTA DE EVENTOS DO DIA -->
+  <div class="lista-eventos">
+    <h3>Eventos do Dia</h3>
+    <div id="eventosDia">
+      <p class="no-data">Selecione um dia no calendário.</p>
+    </div>
+  </div>
+
+  <!-- MODAL DETALHES -->
+  <div id="modalEvento" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <button id="fecharModal" class="close">&times;</button>
+      <h3 id="modalTitulo"></h3>
+      <p><strong>Data:</strong> <span id="modalData"></span> <strong>Hora:</strong> <span id="modalHora"></span></p>
+      <p><strong>Cliente:</strong> <span id="modalCliente"></span></p>
+      <p><strong>Telefone:</strong> <span id="modalTelefone"></span></p>
+      <p><strong>Endereço:</strong> <span id="modalEndereco"></span></p>
+      <p><strong>Monitor:</strong> <span id="modalMonitor"></span></p>
+      <p><strong>Brinquedos:</strong> <span id="modalBrinquedos"></span></p>
+      <p><strong>Valor Total:</strong> R$ <span id="modalValor"></span></p>
+    </div>
+  </div>
 </div>
+
+<!-- FULLCALENDAR -->
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+
+<style>
+/* 📅 LAYOUT PRINCIPAL */
+.agendamentos-fullscreen {
+  width: 100%;
+  height: calc(100vh - 120px);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  background: #fff;
+  gap: 0; /* sem espaçamento entre colunas */
+}
+
+/* COLUNA ESQUERDA (CALENDÁRIO) */
+.calendario-container {
+  flex: 3; /* ⬆️ deixa o calendário ocupar mais espaço */
+  padding: 25px;
+  box-sizing: border-box;
+  background: #fff;
+}
+
+#calendar {
+  height: 100%;
+  width: 100%;
+  border-radius: 10px;
+}
+
+/* COLUNA DIREITA (EVENTOS DO DIA) */
+.lista-eventos {
+  flex: 1.2; /* ⬇️ reduz a largura dos eventos */
+  background: #f8faff;
+  border-left: 2px solid #dbe9ff;
+  padding: 18px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.lista-eventos h3 {
+  color: #1E90FF;
+  margin-bottom: 15px;
+  font-size: 1.1rem;
+}
+
+.evento-item {
+  background: #fff;
+  border: 1px solid #cfe0ff;
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+  font-size: 0.9rem;
+}
+
+.evento-item:hover {
+  background: #eef5ff;
+}
+
+.no-data {
+  color: #999;
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+/* MODAL DETALHES */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+.modal[aria-hidden="false"] {
+  display: flex;
+}
+.modal-content {
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 520px;
+  position: relative;
+}
+.close {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+/* 📱 Ajuste Responsivo */
+@media (max-width: 1024px) {
+  .agendamentos-fullscreen {
+    flex-direction: column;
+  }
+  .calendario-container {
+    flex: none;
+    height: 60vh;
+  }
+  .lista-eventos {
+    flex: none;
+    height: 40vh;
+    border-left: none;
+    border-top: 2px solid #dbe9ff;
+  }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const calendarEl = document.getElementById('calendar');
+
+  const calendar = new FullCalendar.Calendar(calendarEl, {
+    initialView: 'dayGridMonth',
+    locale: 'pt-br',
+    height: '100%',
+    expandRows: true,
+    headerToolbar: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'dayGridMonth,timeGridWeek,timeGridDay'
+    },
+    events: '/api/agendamentos',
+    eventColor: '#ffb84d',
+    eventDisplay: 'block',
+
+    eventClick: function(info) {
+      abrirModal(info.event.id);
+    },
+
+    dateClick: function(info) {
+      const dataSelecionada = info.dateStr;
+      fetch('/api/agendamentos')
+        .then(res => res.json())
+        .then(eventos => {
+          const eventosDia = eventos.filter(e => e.start.startsWith(dataSelecionada));
+          const container = document.getElementById('eventosDia');
+          container.innerHTML = eventosDia.length
+            ? eventosDia.map(ev => `
+                <div class="evento-item" onclick="abrirModal('${ev.id}')">
+                  <strong>${ev.title}</strong><br>
+                  ${ev.extendedProps.hora_festa || '-'} — R$ ${ev.extendedProps.valor_total.toFixed(2)}
+                </div>
+              `).join('')
+            : '<p class="no-data">Nenhum evento neste dia.</p>';
+        });
+    }
+  });
+
+  calendar.render();
+
+  // MODAL - FECHAR
+  document.getElementById('fecharModal').addEventListener('click', () => {
+    document.getElementById('modalEvento').setAttribute('aria-hidden', 'true');
+  });
+  window.addEventListener('click', e => {
+    const modal = document.getElementById('modalEvento');
+    if (e.target === modal) modal.setAttribute('aria-hidden', 'true');
+  });
+});
+
+// FUNÇÃO PARA ABRIR MODAL PELO ID
+function abrirModal(id) {
+  fetch('/api/agendamentos')
+    .then(res => res.json())
+    .then(eventos => {
+      const ev = eventos.find(e => e.id == id);
+      if (!ev) return;
+      const [ano, mes, diaHora] = ev.start.split('T');
+      const dataFormatada = ano && mes ? ev.start.split('T')[0].split('-').reverse().join('/') : '-';
+      document.getElementById('modalTitulo').innerText = ev.title;
+      document.getElementById('modalData').innerText = dataFormatada;
+      document.getElementById('modalHora').innerText = ev.extendedProps.hora_festa || '-';
+      document.getElementById('modalCliente').innerText = ev.title.split('—')[0].trim();
+      document.getElementById('modalTelefone').innerText = ev.extendedProps.telefone || '-';
+      document.getElementById('modalEndereco').innerText = ev.extendedProps.endereco || '-';
+      document.getElementById('modalMonitor').innerText = ev.extendedProps.monitor || '-';
+      document.getElementById('modalBrinquedos').innerText = (ev.extendedProps.brinquedos || []).join(', ');
+      document.getElementById('modalValor').innerText = ev.extendedProps.valor_total.toFixed(2);
+      document.getElementById('modalEvento').setAttribute('aria-hidden', 'false');
+    });
+}
+</script>

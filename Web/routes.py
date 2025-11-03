@@ -4,6 +4,7 @@ from app import app
 from flask import render_template, request, redirect, url_for, current_app, flash
 from storage import Orcamento, db, Brinquedo, Monitor
 from werkzeug.utils import secure_filename
+from flask import jsonify
 
 # Cadastro de Brinquedo (Admin)
 @app.route('/admin', methods=['GET', 'POST'])
@@ -164,6 +165,8 @@ def pagina_usuario():
         page_title='Catálogo de Brinquedos',
         page_content=page_content
     )
+
+
 
 # Cadastro de Orçamento/Agendamento
 @app.route('/orcamentos', methods=['GET', 'POST'])
@@ -326,14 +329,40 @@ def adicionar_despesa():
     flash(f"Despesa '{descricao}' adicionada com sucesso!", "success")
     return redirect('/financeiro')
 
-# Listagem de Agendamentos
+# API que fornece os agendamentos em JSON para o calendário
+@app.route('/api/agendamentos')
+def api_agendamentos():
+    eventos = []
+    orcamentos = Orcamento.query.filter_by(agendado=True).all()
+    for o in orcamentos:
+        hora_str = o.hora_festa.strftime('%H:%M') if o.hora_festa else '00:00'
+        monitor_nome = o.monitor.nome if hasattr(o, 'monitor') and o.monitor else 'Sem monitor'
+        eventos.append({
+            "id": o.id,
+            "title": o.nome_cliente,  # 👈 só o nome do cliente no calendário
+            "start": f"{o.data_festa.isoformat()}T{hora_str}",  # data + hora
+            "extendedProps": {
+                "telefone": o.telefone,
+                "endereco": o.endereco,
+                "valor_total": float(o.valor_total or 0),
+                "hora_festa": hora_str,
+                "brinquedos": [b.nome for b in o.brinquedos],
+                "monitor": monitor_nome  # 👈 novo campo
+            },
+            "color": "#ffb84d"
+        })
+    return jsonify(eventos)
+
+
+
+# Substitua a rota pagina_agendamentos atual por esta (ou edite para renderizar o novo template)
 @app.route('/agendamentos')
 def pagina_agendamentos():
-    agendados = Orcamento.query.filter_by(agendado=True).all()
-    page_content = render_template('agendamentos.html', agendados=agendados)
+    # renderiza o template que contém o calendário
+    page_content = render_template('agendamentos.html')
     return render_template(
         'home.html',
         active_page='agendamentos',
-        page_title='Festas Agendadas',
+        page_title='Agendamentos',
         page_content=page_content
     )
