@@ -166,6 +166,31 @@ def pagina_usuario():
         page_content=page_content
     )
 
+@app.route('/api/monitores')
+def api_monitores():
+    monitores = Monitor.query.all()
+    return jsonify([{"id": m.id, "nome": m.nome} for m in monitores])
+
+@app.route('/alterar_monitor/<int:id>', methods=['POST'])
+def alterar_monitor(id):
+    evento = Orcamento.query.get_or_404(id)
+    dados = request.get_json()
+    novo_monitor_id = dados.get('monitor_id')
+
+    novo_monitor = Monitor.query.get(novo_monitor_id)
+    if not novo_monitor:
+        return jsonify({"mensagem": "Monitor não encontrado."}), 404
+
+    conflito = Orcamento.query.filter_by(monitor_id=novo_monitor_id, data_festa=evento.data_festa).first()
+    if conflito:
+        return jsonify({"mensagem": f"O monitor {novo_monitor.nome} já está agendado para esta data."}), 400
+
+    evento.monitor_id = novo_monitor_id
+    db.session.commit()
+
+    return jsonify({"mensagem": f"Monitor alterado com sucesso para {novo_monitor.nome}!"})
+
+
 
 
 # Cadastro de Orçamento/Agendamento
@@ -355,7 +380,7 @@ def api_agendamentos():
         })
     return jsonify(eventos)
 
-
+''
 # 🟩 Finalizar evento — adiciona receita ao financeiro
 @app.route('/finalizar_evento/<int:id>', methods=['POST'])
 def finalizar_evento(id):

@@ -22,9 +22,15 @@
       <p><strong>Cliente:</strong> <span id="modalCliente"></span></p>
       <p><strong>Telefone:</strong> <span id="modalTelefone"></span></p>
       <p><strong>Endereço:</strong> <span id="modalEndereco"></span></p>
-      <p><strong>Monitor:</strong> <span id="modalMonitor"></span></p>
+      <p><strong>Monitor atual:</strong> <span id="modalMonitor"></span></p>
       <p><strong>Brinquedos:</strong> <span id="modalBrinquedos"></span></p>
       <p><strong>Valor Total:</strong> R$ <span id="modalValor"></span></p>
+
+      <!-- NOVO BLOCO: alterar monitor -->
+      <label><strong>Alterar Monitor:</strong>
+        <select id="selectMonitor" style="width:100%; margin-top:5px; padding:6px; border-radius:6px; border:1px solid #ccc;"></select>
+      </label>
+      <button id="btnSalvarAlteracao" class="btn" style="background:#007bff; margin-top:10px;">💾 Salvar Alterações</button>
 
       <!-- BOTÕES DE AÇÃO -->
       <div class="acoes-modal">
@@ -202,7 +208,6 @@ document.addEventListener('DOMContentLoaded', function() {
       carregarEventosDoDia(info.dateStr);
     },
 
-    // ⏰ Ao carregar o calendário pela primeira vez
     datesSet: function() {
       const hoje = new Date();
       const dataHoje = hoje.toISOString().split('T')[0];
@@ -238,7 +243,6 @@ document.addEventListener('DOMContentLoaded', function() {
       });
   }
 
-  // 🔹 Já seleciona o dia atual e mostra os eventos assim que a página abre
   const hoje = new Date();
   const dataHoje = hoje.toISOString().split('T')[0];
   carregarEventosDoDia(dataHoje);
@@ -246,6 +250,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
 let eventoAtual = null;
 
+// 🔹 Carregar monitores no select
+function carregarMonitoresSelecionavel(monitorAtual) {
+  fetch('/api/monitores')
+    .then(res => res.json())
+    .then(monitores => {
+      const select = document.getElementById('selectMonitor');
+      select.innerHTML = monitores.map(m =>
+        `<option value="${m.id}" ${m.nome === monitorAtual ? 'selected' : ''}>${m.nome}</option>`
+      ).join('');
+    });
+}
+
+// 🔹 Abrir modal com dados do evento
 function abrirModal(id) {
   fetch('/api/agendamentos')
     .then(res => res.json())
@@ -265,8 +282,30 @@ function abrirModal(id) {
       document.getElementById('modalBrinquedos').innerText = (ev.extendedProps.brinquedos || []).join(', ');
       document.getElementById('modalValor').innerText = ev.extendedProps.valor_total.toFixed(2);
       document.getElementById('modalEvento').setAttribute('aria-hidden', 'false');
+
+      // Carrega monitores disponíveis
+      carregarMonitoresSelecionavel(ev.extendedProps.monitor);
     });
 }
+
+// 💾 Salvar alteração de monitor
+document.getElementById('btnSalvarAlteracao').addEventListener('click', () => {
+  if (!eventoAtual) return;
+  const novoMonitorId = document.getElementById('selectMonitor').value;
+
+  if (confirm("Deseja realmente alterar o monitor deste evento?")) {
+    fetch(`/alterar_monitor/${eventoAtual.id}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ monitor_id: novoMonitorId })
+    })
+      .then(res => res.json())
+      .then(data => {
+        alert(data.mensagem);
+        window.location.reload();
+      });
+  }
+});
 
 // ✅ Finalizar evento
 document.getElementById('btnFinalizar').addEventListener('click', () => {
@@ -294,4 +333,3 @@ document.getElementById('btnExcluir').addEventListener('click', () => {
   }
 });
 </script>
-

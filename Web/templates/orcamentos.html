@@ -34,15 +34,15 @@
     </div>
 
     <label>Selecione o Monitor:
-      <select name="monitor_id" required>
-        <option value="">-- Escolha um monitor --</option>
-        {% for monitor in monitores %}
-        {% if monitor.disponibilidade %}
-        <option value="{{ monitor.id }}">{{ monitor.nome }} ({{ monitor.telefone }})</option>
-        {% endif %}
-        {% endfor %}
-      </select>
-    </label>
+  <select name="monitor_id" required>
+    {% for monitor in monitores %}
+      <option value="{{ monitor.id }}" {% if monitor.nome == 'Indefinido' %}selected{% endif %}>
+        {{ monitor.nome }}{% if monitor.telefone and monitor.telefone != '-' %} ({{ monitor.telefone }}){% endif %}
+      </option>
+    {% endfor %}
+  </select>
+</label>
+
 
     <button type="submit" class="btn">Orçar Festa</button>
   </form>
