@@ -44,4 +44,3 @@ class Despesa(db.Model):
     descricao = db.Column(db.String(100), nullable=False)
     valor = db.Column(db.Float, nullable=False)
     data = db.Column(db.Date, default=date.today)
-

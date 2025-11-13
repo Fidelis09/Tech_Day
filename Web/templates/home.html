@@ -1,45 +1,49 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ page_title }} | Brinquedos Infláveis</title>
-    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-   
-</head>
-<body>
-    <div class="container">
-        <aside class="sidebar">
-            <div class="logo">
-            <img src="{{ url_for('static', filename='imagens/logo.png') }}" alt="Logo Brinquedos Infláveis">
-                <h1>Loca Fest</h1>
-            </div>
-            <nav>
-                <a href="/admin" class="{{ 'active' if active_page == 'admin' else '' }}">Cadastrar Brinquedos</a>
-                <a href="/usuario" class="{{ 'active' if active_page == 'usuario' else '' }}">Catálogo</a>
-                <a href="/agendamentos" class="{{ 'active' if active_page == 'agendamentos' else '' }}">Agendamentos</a>
-                <a href="/orcamentos" class="{{ 'active' if active_page == 'orcamentos' else '' }}">Orçar Festa</a>
-                <a href="/financeiro" class="{{ 'active' if active_page == 'financeiro' else '' }}">Finanças</a>
-            </nav>
-        </aside>
-        <main class="content">
-            <header class="page-header">
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                    {% if messages %}
-                        {% for category, message in messages %}
-                            <div class="alert alert-{{ category }}">{{ message }}</div>
-                        {% endfor %}
-                    {% endif %}
-                {% endwith %}
-                {% if active_page not in ['home', 'admin'] %}
-                    <h2>{{ page_title }}</h2>
-                {% endif %}
-
-            </header>
-            <section class="page-content">
-                {{ page_content|safe }}
-            </section>
-        </main>
+<div class="card">
+  <form method="POST" class="form">
+    <div class="left-column">
+      <label>Nome do Cliente:
+        <input type="text" name="nome_cliente" required>
+      </label>
+      <label>Telefone:
+        <input type="text" name="telefone">
+      </label>
+      <label>Endereço:
+        <input type="text" name="endereco">
+      </label>
+      <div style="display: flex; gap: 1rem;">
+        <label style="flex: 1;">Data da Festa:
+          <input type="date" name="data_festa" required style="width: 100%; box-sizing: border-box;">
+        </label>
+        <label style="flex: 1;">Hora da Festa:
+          <input type="time" name="hora_festa" required style="width: 100%; box-sizing: border-box;">
+        </label>
+      </div>
     </div>
-</body>
-</html>
+
+    <div class="right-column">
+      <p class="label-sub">Selecione os brinquedos:</p>
+      <div class="checkbox-group">
+        {% for brinquedo in brinquedos %}
+        <label class="checkbox-item">
+          <input type="checkbox" name="brinquedos" value="{{ brinquedo.id }}">
+          <span>{{ brinquedo.nome }}</span>
+          <small>R$ {{ "%.2f"|format(brinquedo.preco) }}</small>
+        </label>
+        {% endfor %}
+      </div>
+    </div>
+
+    <label>Selecione o Monitor:
+  <select name="monitor_id" required>
+    {% for monitor in monitores %}
+      <option value="{{ monitor.id }}" {% if monitor.nome == 'Indefinido' %}selected{% endif %}>
+        {{ monitor.nome }}{% if monitor.telefone and monitor.telefone != '-' %} ({{ monitor.telefone }}){% endif %}
+      </option>
+    {% endfor %}
+  </select>
+</label>
+
+
+    <button type="submit" class="btn">Orçar Festa</button>
+  </form>
+</div>  
