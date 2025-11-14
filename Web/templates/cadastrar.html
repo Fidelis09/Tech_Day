@@ -1,0 +1,72 @@
+<div class="cadastrar-card">
+    <h2 class="cadastrar-title">Cadastro de Brinquedo</h2>
+
+    <div class="cadastrar-content">
+
+        <!-- Preview da imagem -->
+        <div class="preview-wrapper">
+            <img id="preview-img" src="" alt="Prévia do Brinquedo">
+            <p class="preview-text">A pré-visualização aparecerá aqui</p>
+        </div>
+
+        <form method="post" enctype="multipart/form-data" class="cadastrar-form">
+            <input type="hidden" name="tipo" value="brinquedo">
+
+            <div class="grid-2">
+                <label>
+                    <span><i class="icon fas fa-tag"></i> Nome do Brinquedo</span>
+                    <input type="text" name="nome" required>
+                </label>
+
+                <label>
+                    <span><i class="icon fas fa-ruler"></i> Tamanho</span>
+                    <input type="text" name="tamanho" required>
+                </label>
+
+                <label>
+                    <span><i class="icon fas fa-money-bill"></i> Preço</span>
+                    <input type="number" step="0.01" name="preco" required>
+                </label>
+
+                <label>
+                    <span><i class="icon fas fa-child"></i> Faixa Etária</span>
+                    <input type="text" name="faixa_etaria" required>
+                </label>
+            </div>
+
+            <label class="full">
+                <span><i class="icon fas fa-image"></i> Imagem do Brinquedo</span>
+                <input type="file" name="imagem" accept="image/*" required onchange="previewImage(event)">
+                <small class="file-note">Formatos aceitos: JPG, PNG • Tamanho recomendado: 800×600</small>
+            </label>
+
+            <label class="full">
+                <span><i class="icon fas fa-info-circle"></i> Descrição (opcional)</span>
+                <textarea name="descricao" rows="4" placeholder="Ex: Ideal para festas, material PVC reforçado..."></textarea>
+            </label>
+
+            <button type="submit" class="btn cadastrar-btn">
+                <i class="fas fa-check-circle"></i> Salvar Brinquedo
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Script de prévia da imagem -->
+<script>
+function previewImage(event) {
+    const img = document.getElementById('preview-img');
+    const text = document.querySelector('.preview-text');
+    img.src = URL.createObjectURL(event.target.files[0]);
+    img.style.display = 'block';
+    text.style.display = 'none';
+}
+</script>
+
+<!-- FontAwesome para ícones -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+
+
+<!-- teste so para ver se ele atualiza o arquivo no git -->
+

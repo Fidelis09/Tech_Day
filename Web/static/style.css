@@ -54,7 +54,7 @@ body {
     display: flex;
     flex-direction: column;
     /* Distribui topo e base (logo/menu e rodapé) */
-    justify-content: space-between;
+    justify-content: flex-start;
     /* Fixa a sidebar na lateral esquerda */
     position: fixed;
     left: 0;
@@ -1095,3 +1095,750 @@ form > .btn {
   color: #666;
 }
 .close:hover { color: #000; }
+
+/* ========================================================= */
+/* LOGIN – completamente isolado do restante do sistema      */
+/* Tudo funciona APENAS dentro de .login-page                */
+/* ========================================================= */
+
+.login-page {
+    background: linear-gradient(135deg, #1E90FF, #42a5f5);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+}
+
+.login-page * {
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 420px;
+    padding: 20px;
+}
+
+.login-card {
+    background: white;
+    border-radius: 18px;
+    padding: 40px 35px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.18);
+    animation: loginFade 0.6s ease forwards;
+}
+
+@keyframes loginFade {
+    from { transform: translateY(40px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.login-header img {
+    width: 90px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.login-header h2 {
+    margin: 0;
+    font-weight: 700;
+    color: #1976d2;
+}
+
+.login-header p {
+    margin-top: 5px;
+    font-size: 0.95rem;
+    color: #666;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.login-field {
+    position: relative;
+    margin-bottom: 25px;
+}
+
+.login-field input {
+    width: 100%;
+    padding: 14px 12px;
+    border: 1.5px solid #cfd9ea;
+    border-radius: 10px;
+    font-size: 1rem;
+    outline: none;
+    transition: 0.3s;
+}
+
+.login-field label {
+    position: absolute;
+    pointer-events: none;
+    top: 50%;
+    left: 12px;
+    transform: translateY(-50%);
+    color: #999;
+    transition: 0.3s ease;
+    background: white;
+    padding: 0 4px;
+}
+
+.login-field input:focus {
+    border-color: #1E90FF;
+}
+
+.login-field input:focus + label,
+.login-field input:valid + label {
+    top: -7px;
+    left: 10px;
+    font-size: 0.8rem;
+    color: #1E90FF;
+}
+
+.login-btn {
+    margin-top: 10px;
+    background: #1E90FF;
+    padding: 12px;
+    width: 100%;
+    color: white;
+    border-radius: 10px;
+    border: none;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 4px 12px rgba(30,144,255,0.3);
+}
+
+.login-btn:hover {
+    background: #0f5ec3;
+    transform: translateY(-2px);
+}
+
+.login-alert {
+    margin-top: 12px;
+    padding: 10px;
+    text-align: center;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.alert-error {
+    background: #ffdddd;
+    color: #b30000;
+}
+
+/* ========================================================= */
+/* Correção final para labels do login                       */
+/* ========================================================= */
+
+.login-page .login-field label {
+    position: absolute !important;
+    top: 50% !important;
+    left: 12px !important;
+    transform: translateY(-50%) !important;
+    background: white !important;
+    padding: 0 4px !important;
+    font-size: 1rem !important;
+    color: #999 !important;
+    pointer-events: none !important;
+    transition: 0.3s ease !important;
+    margin: 0 !important;
+    display: inline !important;
+}
+
+/* Quando o input está focado ou preenchido */
+.login-page .login-field input:focus + label,
+.login-page .login-field input:valid + label {
+    top: -7px !important;
+    left: 10px !important;
+    font-size: 0.78rem !important;
+    color: #1E90FF !important;
+}
+
+/* ========================================================= */
+/* Correção: garantir que usuário e senha tenham o MESMO estilo */
+/* ========================================================= */
+
+.login-page .login-field input {
+    width: 100% !important;
+    padding: 14px 12px !important;
+    height: 48px !important;      /* 🔥 garante altura igual */
+    border: 1.5px solid #cfd9ea !important;
+    border-radius: 10px !important;
+    font-size: 1rem !important;
+    box-sizing: border-box !important;
+}
+
+/* Para evitar que o tipo "password" puxe algum estilo global */
+.login-page input[type="password"],
+.login-page input[type="text"] {
+    padding: 14px 12px !important;
+    height: 48px !important;
+}
+/* ========================================================= */
+/* WELCOME PAGE – isolado do resto                           */
+/* ========================================================= */
+
+.welcome-container {
+    padding: 2rem;
+    animation: fadeIn 0.7s ease forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.welcome-hero {
+    background: linear-gradient(135deg, #1E90FF, #42a5f5);
+    padding: 50px 30px;
+    border-radius: 18px;
+    color: white;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    margin-bottom: 40px;
+}
+
+.welcome-hero h1 {
+    font-size: 2.4rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.welcome-hero h1 span {
+    color: #ffeb3b;
+}
+
+.welcome-hero p {
+    font-size: 1.1rem;
+    margin-bottom: 25px;
+    opacity: 0.9;
+}
+
+.welcome-btn {
+    display: inline-block;
+    padding: 14px 28px;
+    background: white;
+    color: #1E90FF;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255,255,255,0.4);
+}
+
+.welcome-btn:hover {
+    background: #ffeb3b;
+    color: #0f5ec3;
+}
+
+.welcome-content {
+    background: white;
+    padding: 35px;
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.welcome-content h2 {
+    margin-top: 0;
+    color: #1E90FF;
+    font-weight: 700;
+}
+
+.welcome-content p {
+    line-height: 1.6rem;
+    color: #444;
+    font-size: 1rem;
+    margin-bottom: 12px;
+}
+
+/* ========================================================= */
+/* Dashboard — versão larga                                 */
+/* ========================================================= */
+
+.dashboard-card {
+    max-width: 95% !important;   /* ocupa quase toda a tela */
+    width: 95% !important;
+    margin: 20px auto;           /* centralizado sem colar na sidebar */
+    padding: 2rem 2.5rem !important;   /* mais espaço interno */
+}
+
+.dashboard-card h3 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+}
+
+/* Grid mais confortável, ocupando melhor o espaço */
+.dashboard-card .dashboard-grid {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+}
+
+/* Métricas mais amplas */
+.dashboard-card .metric {
+    padding: 20px 22px;
+    min-height: 180px;
+}
+
+/* ========================================================= */
+/* Cadastrar Brinquedo — versão larga e moderna              */
+/* ========================================================= */
+
+.cadastrar-card {
+    max-width: 95% !important;
+    width: 95% !important;
+    margin: 20px auto;
+    padding: 2.5rem;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(30,144,255,0.12);
+    animation: fadeIn 0.6s ease forwards;
+}
+
+.cadastrar-title {
+    text-align: center;
+    font-size: 2rem;
+    color: #1E90FF;
+    margin-bottom: 30px;
+    font-weight: 700;
+}
+
+.cadastrar-content form {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.cadastrar-content label {
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 12px;
+}
+
+.cadastrar-content input[type="text"],
+.cadastrar-content input[type="number"],
+.cadastrar-content input[type="file"],
+.cadastrar-content select {
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1.5px solid #cfd9ea;
+    font-size: 1rem;
+    margin-top: 5px;
+}
+
+.cadastrar-content input:focus {
+    border-color: #1E90FF;
+    outline: none;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ========================================================= */
+/* Cadastrar Brinquedo — versão PRO                         */
+/* ========================================================= */
+
+.cadastrar-card {
+    max-width: 95% !important;
+    width: 95% !important;
+    margin: 20px auto;
+    padding: 2.8rem;
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 12px 30px rgba(30,144,255,0.15);
+    animation: fadeIn 0.6s ease forwards;
+}
+
+.cadastrar-title {
+    text-align: center;
+    font-size: 2.3rem;
+    color: #1E90FF;
+    margin-bottom: 30px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+/* Grid de 2 colunas */
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+}
+
+.cadastrar-form label {
+    display: flex;
+    flex-direction: column;
+    font-weight: 600;
+    color: #444;
+    font-size: 0.95rem;
+}
+
+.cadastrar-form input,
+.cadastrar-form textarea {
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1.5px solid #cfd9ea;
+    margin-top: 7px;
+    font-size: 1rem;
+    transition: 0.25s;
+}
+
+.cadastrar-form textarea {
+    resize: vertical;
+}
+
+.cadastrar-form input:focus,
+.cadastrar-form textarea:focus {
+    border-color: #1E90FF;
+    box-shadow: 0 0 6px rgba(30,144,255,0.35);
+    outline: none;
+}
+
+/* Ícones */
+.icon {
+    margin-right: 6px;
+    color: #1E90FF;
+}
+
+/* Label que ocupa linha inteira */
+.full {
+    grid-column: span 2;
+}
+
+/* Preview da imagem */
+.preview-wrapper {
+    width: 100%;
+    height: 260px;
+    background: #f0f4ff;
+    border: 2px dashed #a8c6ff;
+    border-radius: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 25px;
+    overflow: hidden;
+}
+
+.preview-wrapper img {
+    width: auto;
+    height: 100%;
+    display: none;
+    border-radius: 10px;
+}
+
+.preview-wrapper .preview-text {
+    font-size: 1rem;
+    color: #7a99cc;
+}
+
+.file-note {
+    margin-top: 4px;
+    font-size: 0.85rem;
+    color: #777;
+}
+
+/* Botão principal */
+.cadastrar-btn {
+    margin-top: 20px;
+    background: #1E90FF;
+    padding: 14px 30px;
+    font-size: 1.15rem;
+    border-radius: 12px;
+    font-weight: 700;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cadastrar-btn:hover {
+    background: #0f5ec3;
+    transform: translateY(-3px);
+}
+
+/* ========================================================= */
+/* WELCOME PAGE – estilo clean e profissional                */
+/* ========================================================= */
+
+.welcome-pro {
+    text-align: center;
+    padding: 2rem;
+    animation: fadeIn 0.7s ease forwards;
+}
+
+.welcome-top {
+    margin-bottom: 30px;
+}
+
+.welcome-logo {
+    width: 120px;
+    height: auto;
+    margin-bottom: 15px;
+}
+
+.welcome-pro h1 {
+    font-size: 2.4rem;
+    margin: 0;
+    font-weight: 800;
+    color: #333;
+}
+
+.welcome-pro h1 span {
+    color: #ff9800;
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    color: #555;
+    margin-top: 8px;
+}
+
+.welcome-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 25px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.welcome-box {
+    background: white;
+    padding: 24px 22px;
+    border-radius: 18px;
+    text-align: left;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: 0.25s ease;
+}
+
+.welcome-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+.welcome-box h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-weight: 700;
+    color: #333;
+}
+
+.welcome-box p {
+    margin: 0;
+    color: #555;
+    line-height: 1.5rem;
+}
+
+.welcome-tip {
+    font-size: 1rem;
+    margin-top: 20px;
+    color: #666;
+}
+
+.welcome-tip span {
+    color: #ff9800;
+    font-weight: 700;
+}
+
+/* fade animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ========================================================= */
+/* ORÇAMENTO – layout moderno, premium e isolado             */
+/* ========================================================= */
+
+.orcamento-card {
+    max-width: 95%;
+    width: 95%;
+    margin: 20px auto;
+    padding: 2.5rem;
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 12px 30px rgba(30,144,255,0.15);
+    animation: fadeIn 0.6s ease forwards;
+}
+
+.orcamento-title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 800;
+    color: #1E90FF;
+    margin-bottom: 30px;
+}
+
+/* Layout principal */
+.orcamento-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+/* Esquerda */
+.orcamento-left label {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 18px;
+    font-weight: 600;
+    color: #444;
+}
+
+.orcamento-left span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.orcamento-left input {
+    margin-top: 6px;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1.5px solid #cfd9ea;
+    transition: 0.25s;
+}
+
+.orcamento-left input:focus {
+    border-color: #1E90FF;
+    box-shadow: 0 0 6px rgba(30,144,255,0.35);
+    outline: none;
+}
+
+/* Grade de Data + Hora */
+.orcamento-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+/* Direita */
+.label-sub {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+    color: #333;
+}
+
+.checkbox-brinquedos {
+    display: grid;
+    gap: 15px;
+    max-height: 450px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+/* Item de brinquedo */
+.checkbox-item-pro {
+    background: #f5f9ff;
+    border: 1.5px solid #d6e6ff;
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.checkbox-item-pro:hover {
+    background: #e9f2ff;
+    transform: translateY(-2px);
+}
+
+.checkbox-item-pro input {
+    width: 20px;
+    height: 20px;
+}
+
+.check-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.check-info strong {
+    font-size: 1rem;
+    color: #1E90FF;
+}
+
+.check-info small {
+    color: #555;
+}
+
+/* Botão */
+.orcamento-btn {
+    grid-column: span 2;
+    margin-top: 20px;
+    padding: 14px 20px;
+    font-size: 1.2rem;
+    border-radius: 12px;
+    font-weight: 700;
+    background: #1E90FF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.orcamento-btn:hover {
+    background: #0f5ec3;
+    transform: translateY(-3px);
+}
+
+/* Responsivo */
+@media (max-width: 900px) {
+    .orcamento-form {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ========================================================= */
+/* Ajustes de layout — Orçamento mais estreito e simétrico   */
+/* ========================================================= */
+
+/* Diminui a largura total do card */
+.orcamento-card {
+    max-width: 75% !important;   /* antes 90% */
+}
+
+/* Deixa a coluna esquerda bem menor */
+.orcamento-left {
+    flex: 0.6;                   /* antes: flex: 1 */
+    min-width: 260px;
+}
+
+/* Coluna da direita maior */
+.orcamento-right {
+    flex: 1.4;                   /* antes: flex: 1 */
+}
+
+/* diminui inputs para ficarem mais proporcionais */
+.orcamento-left input {
+    font-size: 0.95rem;
+    padding: 10px 12px;
+}
+
+/* Organiza os campos da esquerda mais compactos */
+.orcamento-left label {
+    margin-bottom: 10px;
+}
+
+/* Ajusta o espaçamento entre colunas */
+.orcamento-form {
+    gap: 20px !important;
+}
+
+/* Ajuste da linha dupla (data/hora) */
+.orcamento-row label input {
+    padding: 10px;
+    font-size: 0.9rem;
+}

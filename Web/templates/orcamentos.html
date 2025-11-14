@@ -1,49 +1,62 @@
-<div class="card">
-  <form method="POST" class="form">
-    <div class="left-column">
-      <label>Nome do Cliente:
-        <input type="text" name="nome_cliente" required>
-      </label>
-      <label>Telefone:
-        <input type="text" name="telefone">
-      </label>
-      <label>Endereço:
-        <input type="text" name="endereco">
-      </label>
-      <div style="display: flex; gap: 1rem;">
-        <label style="flex: 1;">Data da Festa:
-          <input type="date" name="data_festa" required style="width: 100%; box-sizing: border-box;">
-        </label>
-        <label style="flex: 1;">Hora da Festa:
-          <input type="time" name="hora_festa" required style="width: 100%; box-sizing: border-box;">
-        </label>
-      </div>
-    </div>
+<div class="orcamento-card">
 
-    <div class="right-column">
-      <p class="label-sub">Selecione os brinquedos:</p>
-      <div class="checkbox-group">
-        {% for brinquedo in brinquedos %}
-        <label class="checkbox-item">
-          <input type="checkbox" name="brinquedos" value="{{ brinquedo.id }}">
-          <span>{{ brinquedo.nome }}</span>
-          <small>R$ {{ "%.2f"|format(brinquedo.preco) }}</small>
-        </label>
-        {% endfor %}
-      </div>
-    </div>
+    <h2 class="orcamento-title">Orçar Festa 🎉</h2>
 
-    <label>Selecione o Monitor:
-  <select name="monitor_id" required>
-    {% for monitor in monitores %}
-      <option value="{{ monitor.id }}" {% if monitor.nome == 'Indefinido' %}selected{% endif %}>
-        {{ monitor.nome }}{% if monitor.telefone and monitor.telefone != '-' %} ({{ monitor.telefone }}){% endif %}
-      </option>
-    {% endfor %}
-  </select>
-</label>
+    <form method="POST" class="orcamento-form">
 
+        <!-- COLUNA ESQUERDA -->
+        <div class="orcamento-left">
 
-    <button type="submit" class="btn">Orçar Festa</button>
-  </form>
+            <label>
+                <span><i class="fas fa-user"></i> Nome do Cliente</span>
+                <input type="text" name="nome_cliente" required>
+            </label>
+
+            <label>
+                <span><i class="fas fa-phone"></i> Telefone</span>
+                <input type="text" name="telefone">
+            </label>
+
+            <label>
+                <span><i class="fas fa-map-marker-alt"></i> Endereço</span>
+                <input type="text" name="endereco">
+            </label>
+
+            <div class="orcamento-grid-2">
+                <label>
+                    <span><i class="fas fa-calendar"></i> Data da Festa</span>
+                    <input type="date" name="data_festa" required>
+                </label>
+
+                <label>
+                    <span><i class="fas fa-clock"></i> Hora da Festa</span>
+                    <input type="time" name="hora_festa" required>
+                </label>
+            </div>
+        </div>
+
+        <!-- COLUNA DIREITA -->
+        <div class="orcamento-right">
+            <p class="label-sub">🎪 Selecione os Brinquedos</p>
+
+            <div class="checkbox-brinquedos">
+                {% for brinquedo in brinquedos %}
+                <label class="checkbox-item-pro">
+                    <input type="checkbox" name="brinquedos" value="{{ brinquedo.id }}">
+                    <div class="check-info">
+                        <strong>{{ brinquedo.nome }}</strong>
+                        <small>R$ {{ "%.2f"|format(brinquedo.preco) }}</small>
+                    </div>
+                </label>
+                {% endfor %}
+            </div>
+        </div>
+
+        <button type="submit" class="btn orcamento-btn">
+            <i class="fas fa-check"></i> Confirmar Orçamento
+        </button>
+
+    </form>
 </div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">

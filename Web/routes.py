@@ -2,13 +2,39 @@ import os
 import datetime
 from app import app
 from flask import render_template, request, redirect, url_for, current_app, flash
-from storage import Orcamento, db, Brinquedo, Monitor
+from storage import Orcamento, db, Brinquedo, Monitor, User
 from werkzeug.utils import secure_filename
 from flask import jsonify
+from functools import wraps
 
-# Cadastro de Brinquedo (Admin)
-@app.route('/admin', methods=['GET', 'POST'])
-def pagina_admin():
+from flask import session
+
+def login_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if "user_id" not in session:
+            return redirect("/login")
+        return f(*args, **kwargs)
+    return decorated
+
+
+def role_required(*roles):
+    def decorator(f):
+        @wraps(f)
+        def wrapper(*args, **kwargs):
+            if "user_role" not in session or session["user_role"] not in roles:
+                flash("Você não tem permissão para acessar esta área.", "error")
+                return redirect("/")
+            return f(*args, **kwargs)
+        return wrapper
+    return decorator
+
+
+# Cadastro de Brinquedo (Cadastro)
+@app.route('/cadastrar', methods=['GET', 'POST'])
+@login_required
+@role_required('admin', 'empresa')
+def pagina_cadastrar():
     if request.method == 'POST':
         tipo = request.form.get('tipo')
 
@@ -38,15 +64,16 @@ def pagina_admin():
 
         db.session.commit()
         flash("Cadastro realizado com sucesso!", "success")
-        return redirect('/admin')
+        return redirect('/cadastrar')
 
-    page_content = render_template('admin.html')
+    page_content = render_template('cadastrar.html')
     return render_template(
         'home.html',
-        active_page='admin',
-        page_title='Painel do Administrador',
+        active_page='cadastrar',
+        page_title='Cadastrar Brinquedos',
         page_content=page_content
-    )
+)
+
 
 # Exclusão de Brinquedos Selecionados
 @app.route('/excluir_selecionados', methods=['POST'])
@@ -64,8 +91,10 @@ def excluir_selecionados():
     return redirect('/usuario')
 
 # Página Inicial / Dashboard
-@app.route('/')
-def home():
+@app.route('/dashboard')
+@login_required
+@role_required('admin','empresa')
+def dashboard():
     hoje = datetime.date.today()
     mes = request.args.get('mes', type=int, default=hoje.month)
     ano = request.args.get('ano', type=int, default=hoje.year)
@@ -156,6 +185,8 @@ def home():
 
 # Catálogo do Usuário
 @app.route('/usuario')
+@login_required
+@role_required('user', 'admin', 'empresa')
 def pagina_usuario():
     brinquedos = Brinquedo.query.all()
     page_content = render_template('catalogo.html', brinquedos=brinquedos)
@@ -195,6 +226,8 @@ def alterar_monitor(id):
 
 # Cadastro de Orçamento/Agendamento
 @app.route('/orcamentos', methods=['GET', 'POST'])
+@login_required
+@role_required('admin', 'empresa', 'user')
 def orcamentos():
     brinquedos = Brinquedo.query.all()
     monitores = Monitor.query.filter_by(disponibilidade=True).all()
@@ -259,6 +292,8 @@ from flask import render_template, request, redirect, flash
 from storage import Orcamento, db, Despesa
 
 @app.route('/financeiro')
+@login_required
+@role_required('admin', 'empresa')
 def pagina_financeiro():
     hoje = datetime.date.today()
     mes = request.args.get('mes', type=int, default=hoje.month)
@@ -419,6 +454,8 @@ def excluir_evento(id):
 
 # Substitua a rota pagina_agendamentos atual por esta (ou edite para renderizar o novo template)
 @app.route('/agendamentos')
+@login_required
+@role_required('admin','empresa','monitor')
 def pagina_agendamentos():
     # renderiza o template que contém o calendário
     page_content = render_template('agendamentos.html')
@@ -427,4 +464,42 @@ def pagina_agendamentos():
         active_page='agendamentos',
         page_title='Agendamentos',
         page_content=page_content
+    )
+
+from werkzeug.security import check_password_hash
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        senha = request.form['senha']
+
+        user = User.query.filter_by(username=username).first()
+
+        if not user or not check_password_hash(user.senha, senha):
+            flash("Usuário ou senha incorretos.", "error")
+            return redirect("/login")
+
+        session['user_id'] = user.id
+        session['user_role'] = user.role
+
+        # REDIRECIONAMENTO POR PAPEL
+        return redirect('/welcome')
+
+    return render_template('login.html')
+
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect('/login')
+
+@app.route('/welcome')
+@login_required
+def welcome():
+    return render_template(
+        'home.html',
+        page_title='Bem-vindo',
+        page_content=render_template('welcome.html'),
+        active_page='welcome'
     )

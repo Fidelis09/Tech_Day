@@ -44,3 +44,9 @@ class Despesa(db.Model):
     descricao = db.Column(db.String(100), nullable=False)
     valor = db.Column(db.Float, nullable=False)
     data = db.Column(db.Date, default=date.today)
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(50), unique=True, nullable=False)
+    senha = db.Column(db.String(100), nullable=False)
+    role = db.Column(db.String(20), nullable=False)  # admin, user, empresa, monitor

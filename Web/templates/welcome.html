@@ -1,44 +1,49 @@
-<div class="welcome-container">
-  <div class="welcome-header">
-    <img src="{{ url_for('static', filename='imagens/logo.png') }}" alt="Logo LocaFest" class="welcome-logo">
-    <h1>Bem-vindo(a) à <span class="highlight">LocaFest</span>!</h1>
-    <p class="subtitle">Transformando festas em momentos inesquecíveis 🎈</p>
-  </div>
+<div class="welcome-pro">
 
-  <div class="welcome-grid">
-    <div class="welcome-card">
-      <h3>🎉 Quem Somos</h3>
-      <p>
-        A <strong>LocaFest</strong> é especializada na locação de brinquedos infláveis e recreativos para festas e eventos. 
-        Oferecemos segurança, qualidade e diversão garantida para crianças e adultos.
-      </p>
+    <div class="welcome-top">
+        <img src="{{ url_for('static', filename='imagens/logo.png') }}" class="welcome-logo">
+        <h1>Bem-vindo(a) à <span>LocaFest!</span></h1>
+        <p class="subtitle">Transformando festas em momentos inesquecíveis 🎈</p>
     </div>
 
-    <div class="welcome-card">
-      <h3>🧸 Nossos Brinquedos</h3>
-      <p>
-        Contamos com um catálogo completo de brinquedos infláveis, tobogãs, futebol de sabão, pula-pula e muito mais. 
-        Tudo com manutenção constante e higienização profissional.
-      </p>
+    <div class="welcome-grid">
+
+        <div class="welcome-box">
+            <h3>🧸 Quem Somos</h3>
+            <p>
+                A <strong>LocaFest</strong> é especializada na locação de brinquedos infláveis e recreativos
+                para festas e eventos. Oferecemos segurança, qualidade e diversão garantida para crianças e adultos.
+            </p>
+        </div>
+
+        <div class="welcome-box">
+            <h3>🎪 Nossos Brinquedos</h3>
+            <p>
+                Contamos com um catálogo completo de brinquedos infláveis, tobogãs, futebol de sabão,
+                pula-pula e muito mais. Tudo com manutenção constante e higienização profissional.
+            </p>
+        </div>
+
+        <div class="welcome-box">
+            <h3>🛠️ Nossa Equipe</h3>
+            <p>
+                Temos uma equipe de monitores treinados e prontos para garantir a segurança e a alegria
+                de todos os participantes.
+            </p>
+        </div>
+
+        <div class="welcome-box">
+            <h3>💼 Sistema Interno</h3>
+            <p>
+                Aqui você pode gerenciar <strong>brinquedos, agendamentos, orçamentos e finanças</strong>
+                de forma prática e eficiente. Explore o menu lateral para navegar pelas funções.
+            </p>
+        </div>
+
     </div>
 
-    <div class="welcome-card">
-      <h3>🕹️ Nossa Equipe</h3>
-      <p>
-        Temos uma equipe de monitores treinados e prontos para garantir a segurança e a alegria de todos os participantes.
-      </p>
-    </div>
+    <p class="welcome-tip">
+        💡 <strong>Dica:</strong> acesse o <span>Dashboard</span> para ver o desempenho da empresa neste mês.
+    </p>
 
-    <div class="welcome-card">
-      <h3>💼 Sistema Interno</h3>
-      <p>
-        Aqui, você pode gerenciar <strong>brinquedos, agendamentos, orçamentos e finanças</strong> de forma prática e eficiente.
-        Explore o menu lateral para navegar entre as opções.
-      </p>
-    </div>
-  </div>
-
-  <div class="welcome-footer">
-    <p>💡 Dica: acesse o <a href="/dashboard">Dashboard</a> para ver o desempenho da empresa neste mês.</p>
-  </div>
 </div>
